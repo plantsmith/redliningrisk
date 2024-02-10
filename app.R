@@ -3,13 +3,27 @@
 library(shiny)
 library(tidyverse)
 library(palmerpenguins)
+library(bslib)
+
+my_theme <- bs_theme(bootswatch = 'vapor') %>%
+  bs_theme_update(bg = "rgb(235, 175, 175)", fg = "rgb(63, 11, 11)",
+                     primary = "#B5C142", secondary = "#575155", info = "#103851",
+                     base_font = font_google("Zilla Slab"), code_font = font_google("Syne Mono"),
+                     heading_font = font_google("Montserrat Alternates"), font_scale = 1.3)
+
 
 ### Create the user interface
 
 ui <- fluidPage(
+  theme = my_theme,
+
   titlePanel('I add title'),
   sidebarLayout(
-    sidebarPanel('put my widgets here',
+    sidebarPanel(
+
+      actionButton(inputId = "dice_button", label = "Lucky", icon = icon("dice")),
+
+      textOutput(outputId = "diceroll"),
 
         radioButtons(
           inputId = 'penguin_species',
@@ -27,7 +41,11 @@ ui <- fluidPage(
 
         ), ### end sidebarPanel
 
-    mainPanel('put my graph here',
+    mainPanel(
+      h2("This is our heading font"),
+      p("this is our body text"),
+      code("here is code"),
+
               plotOutput(outputId = 'penguin_plot'),
               h3('Summary table'),
               tableOutput(outputId = 'penguin_table')
@@ -39,6 +57,16 @@ ui <- fluidPage(
 ### Create the server function
 
 server <- function(input, output) {
+
+  # bs_themer() ### only temporary until we get theme we like - then hard code theme
+
+
+  output$diceroll <- reactive({
+    x <- input$dice_button
+    rolls <- sample(1:6, size = 2, replace = TRUE)
+    txt_out <- sprintf("Die 1: %s, die 2: %s, total: %s",rolls[1], rolls[2],sum(rolls))
+    return(txt_out)
+  })
 
   penguin_select <- reactive({
     penguins_df <- penguins %>%
@@ -73,3 +101,6 @@ server <- function(input, output) {
 ### Combine them into an app
 
 shinyApp(ui = ui, server = server)
+
+
+
