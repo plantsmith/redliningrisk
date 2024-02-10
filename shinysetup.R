@@ -4,19 +4,53 @@ library(tidyverse)
 library(sf)
 library(here)
 
-### Create the user interface:
-ui <- fluidPage()
 
-### Create the server function:
-server <- function(input, output) {}
-
-### Combine them into an app:
-shinyApp(ui = ui, server = server)
-
-
+####### REDLINING DATA STUFF ####
 redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
-  janitor::clean_names() %>%
-  filter(city == "Los Angeles")
+   janitor::clean_names() %>%
+   filter(city == "Los Angeles") %>%
+   drop_na()
 
-ggplot() +
-  geom_sf(data=redlining_sf, aes(fill = grade))
+
+  ### Create the user interface:
+  ui <- fluidPage(
+    titlePanel("Risky biz"),
+    sidebarLayout(
+      sidebarPanel("put my widgets here",
+                   radioButtons(
+                     inputId = "grades",
+                     label = "Choose Area Category",
+                     choices = c("Best" = "A",
+                               "Still Desirable" = "B",
+                               "Definitely Declining" = "C" ,
+                               "Hazardous" = "D"))
+                 ), ### end sidebarPanel
+
+      mainPanel("put my graph here",
+
+                plotOutput(outputId = "grade_plot"))
+
+    ), ### end sidebarLayout
+
+) ### end sidebar layout
+
+### REACTIVE GRAPH ###
+
+     server <- function(input, output) {
+      grade_select <- reactive({
+      redline_grade <- redlining_sf %>%
+          filter(grade == input$grades)
+
+        return(redline_grade)
+      }) ### end penguin_select
+
+      output$grade_plot <- renderPlot({
+        ggplot() +
+          geom_sf(data = grade_select(), aes(fill = grade)) +
+          theme_void()
+      }) ### end penguin_plot
+
+    } ### end server
+
+     ### Combine them into an app:
+     shinyApp(ui = ui, server = server)
