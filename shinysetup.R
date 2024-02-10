@@ -18,4 +18,5 @@ redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
   janitor::clean_names() %>%
   filter(city == "Los Angeles")
 
-ggplot()+geom_sf(data=redlining_sf)
+ggplot() +
+  geom_sf(data=redlining_sf, aes(fill = grade))
