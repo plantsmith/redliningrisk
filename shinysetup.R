@@ -15,7 +15,7 @@ redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
 
   ### Create the user interface:
   ui <- fluidPage(
-    theme=bs_theme(bootswatch = 'minty'),
+    theme=bs_theme(bootswatch = 'yeti'),
     titlePanel("Risky biz"),
     sidebarLayout(
       sidebarPanel("put my widgets here",
@@ -40,7 +40,9 @@ redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
 ### REACTIVE GRAPH ###
 
      server <- function(input, output) {
-       bs_themer()
+
+       #bs_themer()
+
       grade_select <- reactive({
       redline_grade <- redlining_sf %>%
           filter(grade %in% input$grades)
