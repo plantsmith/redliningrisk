@@ -23,7 +23,8 @@ redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
                      choices = c("Best" = "A",
                                "Still Desirable" = "B",
                                "Definitely Declining" = "C" ,
-                               "Hazardous" = "D"))
+                               "Hazardous" = "D"),
+                     selected = 1)
                  ), ### end sidebarPanel
 
       mainPanel("put my graph here",
@@ -39,7 +40,7 @@ redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
      server <- function(input, output) {
       grade_select <- reactive({
       redline_grade <- redlining_sf %>%
-          filter(grade == input$grades)
+          filter(grade %in% input$grades)
 
         return(redline_grade)
       }) ### end penguin_select
