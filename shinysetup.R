@@ -17,7 +17,7 @@ redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
     titlePanel("Risky biz"),
     sidebarLayout(
       sidebarPanel("put my widgets here",
-                   radioButtons(
+                   checkboxGroupInput(
                      inputId = "grades",
                      label = "Choose Area Category",
                      choices = c("Best" = "A",
