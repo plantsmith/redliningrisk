@@ -3,6 +3,7 @@ library(shiny)
 library(tidyverse)
 library(sf)
 library(here)
+library(bslib)
 
 
 ####### REDLINING DATA STUFF ####
@@ -14,6 +15,7 @@ redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
 
   ### Create the user interface:
   ui <- fluidPage(
+    theme=bs_theme(bootswatch = 'minty'),
     titlePanel("Risky biz"),
     sidebarLayout(
       sidebarPanel("put my widgets here",
@@ -38,9 +40,11 @@ redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
 ### REACTIVE GRAPH ###
 
      server <- function(input, output) {
+       bs_themer()
       grade_select <- reactive({
       redline_grade <- redlining_sf %>%
           filter(grade %in% input$grades)
+
 
         return(redline_grade)
       }) ### end penguin_select
