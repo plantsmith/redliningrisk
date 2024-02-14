@@ -67,7 +67,9 @@ redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
                                      "Still Desirable" = "B",
                                      "Definitely Declining" = "C" ,
                                      "Hazardous" = "D"),
-                         selected = 1)
+                         selected = 1),
+
+
           ), ### end sidebarPanel
 
           mainPanel("Output graph (will have basemap, redlining zones, green space/canopy cover, social indices). Below the graph will be our summary table, which will show mean values for green space/canopy cover and social indices as they're selected",
@@ -105,7 +107,9 @@ redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
 
 ### REACTIVE GRAPH ###
 
-     server <- function(input, output) {
+     server <-
+
+       function(input, output) {
 
        #bs_themer()
 
@@ -117,10 +121,12 @@ redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
         return(redline_grade)
       }) ### end grade_select
 
+
       output$grade_plot <- renderPlot({
         ggplot() +
           geom_polygon(data = la_county, aes(x = long, y = lat, group = group), color = "black", fill = "lightgray") +
           geom_sf(data = grade_select(), aes(fill = grade)) +
+          geom_sf(data = city_trees, aes(), color = "darkgreen", size = 0.1) +
           theme_void()
       }) ### end grade_plot
 
@@ -129,4 +135,8 @@ redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
 ### Combine them into an app:
 shinyApp(ui = ui, server = server)
 
+# ggplot() +
+#   geom_polygon(data = la_county, aes(x = long, y = lat, group = group), color = "black", fill = "lightgray") +
+#   geom_sf(data = city_trees, aes(), color = "darkgreen", size = 0.1) +
+#   theme_void()
 
