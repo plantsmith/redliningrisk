@@ -8,9 +8,27 @@ library(bslib)
 ###NAT'S ZONE - STAY OUT###
 # Load in new datasets
 
-# Tree Canopy Cover - 2016 dataset
+# Tree Canopy Cover (2016):
 canopy_coverage <- read_csv(here('data/tree_canopy_cover2016.csv')) %>%
   janitor::clean_names()
+
+# City Tree - LA Parks n Rec:
+city_trees <- read_sf(here('data',
+                           'city_trees_rec_and_park',
+                           'city_trees_rec_and_park.shp')) %>%
+  janitor::clean_names()
+
+# CA Enviroscreen Data Dictionary:
+enviroscreen <- readxl::read_xlsx(here('data',
+                                       'calenviroscreen_data_dictionary',
+                                       'calenviroscreen_data_dictionary_2021.xlsx')) %>%
+  janitor::clean_names()
+
+# Heat.Gov Surface Models:
+
+la_heat <-
+
+
 
 ####### REDLINING DATA STUFF ####
 redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
