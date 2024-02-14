@@ -4,6 +4,11 @@ library(tidyverse)
 library(sf)
 library(here)
 library(bslib)
+library(maps)
+
+### basemap
+la_county <- map_data("county", "california") %>% filter(subregion == "los angeles")
+
 
 ###NAT'S ZONE - STAY OUT###
 # Load in new datasets
@@ -39,27 +44,64 @@ redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
 
   ### Create the user interface:
   ui <- fluidPage(
+
     theme=bs_theme(bootswatch = 'yeti'),
+
     titlePanel("Risky biz"),
-    sidebarLayout(
-      sidebarPanel("put my widgets here",
-                   checkboxGroupInput(
-                     inputId = "grades",
-                     label = "Choose Area Category",
-                     choices = c("Best" = "A",
-                               "Still Desirable" = "B",
-                               "Definitely Declining" = "C" ,
-                               "Hazardous" = "D"),
-                     selected = 1)
-                 ), ### end sidebarPanel
 
-      mainPanel("put my graph here",
+    tabsetPanel(
+      tabPanel(
+        title = 'Home',
+        p('This will be our first page, with info and pictures about the project')
+        ), ### end tab 1
 
-                plotOutput(outputId = "grade_plot"))
+      tabPanel(
+        title = 'Map',
+        p('This is our first data tab, containing our map & summary stats table'),
+        sidebarLayout(
+          sidebarPanel("",
+                       checkboxGroupInput(
+                         inputId = "grades",
+                         label = "Choose Area Category",
+                         choices = c("Best" = "A",
+                                     "Still Desirable" = "B",
+                                     "Definitely Declining" = "C" ,
+                                     "Hazardous" = "D"),
+                         selected = 1)
+          ), ### end sidebarPanel
 
-    ), ### end sidebarLayout
+          mainPanel("Output graph (will have basemap, redlining zones, green space/canopy cover, social indices). Below the graph will be our summary table, which will show mean values for green space/canopy cover and social indices as they're selected",
 
-) ### end sidebar layout
+                    plotOutput(outputId = "grade_plot"))
+
+        ), ### end sidebarLayout
+        ), ### end tab 2
+
+      tabPanel(
+        title = 'Histograms',
+        p('This is our second data tab, containing a histogram'),
+        sidebarLayout(
+          sidebarPanel("widget here: select one of our data variables"
+
+          ),
+          mainPanel("histogram here: show distribution of data values by census tract"
+
+          )
+        ) ### end sidebarLayout
+
+        ), ### end tab 3
+
+      tabPanel(
+        title = 'Data & Resources',
+        p('This tab will contain all our data citations, links to resources, and recommended readings for those interested in learning more')
+        ) ### end tab 4
+
+    ) ### end tabsetPanel
+
+    #### sidebar layout
+
+
+) ### end fluidPage
 
 ### REACTIVE GRAPH ###
 
@@ -73,15 +115,18 @@ redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
 
 
         return(redline_grade)
-      }) ### end penguin_select
+      }) ### end grade_select
 
       output$grade_plot <- renderPlot({
         ggplot() +
+          geom_polygon(data = la_county, aes(x = long, y = lat, group = group), color = "black", fill = "lightgray") +
           geom_sf(data = grade_select(), aes(fill = grade)) +
           theme_void()
-      }) ### end penguin_plot
+      }) ### end grade_plot
 
     } ### end server
 
-     ### Combine them into an app:
-     shinyApp(ui = ui, server = server)
+### Combine them into an app:
+shinyApp(ui = ui, server = server)
+
+
