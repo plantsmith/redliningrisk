@@ -10,6 +10,12 @@ library(maps)
 la_county <- map_data("county", "california") %>% filter(subregion == "los angeles")
 
 
+###NAT'S ZONE - STAY OUT###
+# Load in new datasets
+
+# Tree Canopy Cover - 2016 dataset
+canopy_coverage <- read_csv(here('data/tree_canopy_cover2016.csv')) %>%
+  janitor::clean_names()
 
 ####### REDLINING DATA STUFF ####
 redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
