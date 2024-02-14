@@ -48,7 +48,7 @@ redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
 
     theme=bs_theme(bootswatch = 'yeti'),
 
-    titlePanel("Risky biz"),
+    titlePanel("Mapping Heat Risk Inequality"),
 
     tabsetPanel(
       tabPanel(
@@ -122,13 +122,15 @@ redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
         return(redline_grade)
       }) ### end grade_select
 
+      grade_cols <- c("A" = "green", "B" = "blue", "C" = "orange", "D" = "red")
 
       output$grade_plot <- renderPlot({
         ggplot() +
           geom_polygon(data = la_county, aes(x = long, y = lat, group = group), color = "black", fill = "lightgray") +
           geom_sf(data = grade_select(), aes(fill = grade)) +
+          scale_fill_manual(values = grade_cols) +
           geom_sf(data = city_trees, aes(), color = "darkgreen", size = 0.1) +
-          theme_void()
+          theme_minimal()
       }) ### end grade_plot
 
     } ### end server
