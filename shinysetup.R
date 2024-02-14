@@ -31,9 +31,10 @@ enviroscreen <- readxl::read_xlsx(here('data',
 
 # Heat.Gov Surface Models:
 
-la_heat <-
-
-
+heat_island_effects<- read_sf(here('data',
+                                   'heat_island_effects_la',
+                                   'heat_island_effects_la.shp')) %>%
+  janitor::clean_names()
 
 ####### REDLINING DATA STUFF ####
 redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
