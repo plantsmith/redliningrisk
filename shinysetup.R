@@ -36,7 +36,7 @@ heat_island_effects<- read_sf(here('data',
                                    'heat_island_effects_la.shp')) %>%
   janitor::clean_names()
 
-####### REDLINING DATA STUFF ####
+####### REDLINING DATA STUFF #####
 redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
    janitor::clean_names() %>%
    filter(city == "Los Angeles") %>%
@@ -71,7 +71,7 @@ redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
                          selected = 1)
           ), ### end sidebarPanel
 
-          mainPanel("Output graph (will have basemap, redlining zones, green space/canopy cover, social indices). Below the graph will be our summary table, which will show mean values for green space/canopy cover and social indices as they're selected",
+          mainPanel("Output graph (will have interactive basemap, redlining zones, green space/canopy cover, social indices). Below the graph will be our summary table, which will show mean values for green space/canopy cover and social indices as they're selected",
 
                     plotOutput(outputId = "grade_plot"))
 
