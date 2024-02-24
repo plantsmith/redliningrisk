@@ -6,6 +6,9 @@ library(here)
 library(bslib)
 library(maps)
 
+#2/23/24:
+#TO DO: wrangle all datasets and join. filter tree dataset
+
 ### basemap
 la_county <- map_data("county", "california") %>% filter(subregion == "los angeles")
 
@@ -103,7 +106,6 @@ redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
 
     #### sidebar layout
 
-
 ) ### end fluidPage
 
 ### REACTIVE GRAPH ###
@@ -127,7 +129,7 @@ redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
       output$grade_plot <- renderPlot({
         # Base plot with LA County boundaries
         base_plot <- ggplot() +
-          geom_polygon(data = la_county, aes(x = long, y = lat, group = group), color = "black", fill = "lightgray") +
+          geom_polygon(data = la_county, aes(x = long, y = lat, group = group), color = "black", fill = "lightgrey") +
           geom_sf(data = city_trees, aes(), color = "darkgreen", size = 0.1) +
           theme_minimal()
 
@@ -135,8 +137,7 @@ redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
         grade_plot <- base_plot +
           geom_sf(data = grade_select(), aes(fill = grade)) +
           scale_fill_manual(values = grade_cols) +
-          labs(title = "Distribution of Grades and City Trees in LA County",
-               x = "Longitude",
+          labs(x = "Longitude",
                y = "Latitude",
                fill = "Grade")
 
