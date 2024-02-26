@@ -21,8 +21,7 @@ canopy_coverage <- read_csv(here('data/tree_canopy_cover2016.csv')) %>%
 city_trees <- read_sf(here('data',
                            'city_trees_rec_and_park',
                            'city_trees_rec_and_park.shp')) %>%
-  janitor::clean_names() %>%
-  select(column1, column2, column3)
+  janitor::clean_names()
 
 # CA Enviroscreen Data Dictionary:
 enviroscreen <- readxl::read_xlsx(here('data',
@@ -45,11 +44,14 @@ redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
 
 
 ### Create the user interface:
-ui <- fluidPage(
+ui <- fluidPage(theme=bs_theme(bootswatch = 'yeti'),
+                titlePanel("Mapping Heat Risk Inequality"),
 
-  theme=bs_theme(bootswatch = 'yeti'),
 
-  titlePanel("Mapping Heat Risk Inequality"),
+                tags$div(class = "jumbotron text-center", style = "margin-bottom:0px;margin-top:0px",
+                         tags$h2(class = 'jumbotron-heading', stye = 'margin-bottom:0px;margin-top:0px', 'Mapping Heat Risk Inequality'),
+                         p('Subheader If We Want')
+                ),
 
   tabsetPanel(
     tabPanel(
@@ -74,8 +76,15 @@ ui <- fluidPage(
                        inputId = "id",
                        label = "City Trees",
                        choices = c("id" = "City Tree")
-                     ) # <- Closed checkboxGroupInput
-        ), # <- Closed sidebarPanel
+                     ), # <- Closed checkboxGroupInput
+        checkboxGroupInput(
+          inputId = "income",
+          label = "Income",
+          choices = c("Low" = "low",
+                      "Medium" = "Medium",
+                      "High" = "High")
+        ) # <- Closed checkboxGroupInput
+      ),# <- Closed sidebarPanel
 
         mainPanel("Output graph (will have interactive basemap, redlining zones, green space/canopy cover, social indices). Below the graph will be our summary table, which will show mean values for green space/canopy cover and social indices as they're selected",
 
@@ -109,6 +118,8 @@ ui <- fluidPage(
 
 ) ### end fluidPage
 
+
+
 ### REACTIVE GRAPH ###
 
 server <-
@@ -130,8 +141,8 @@ server <-
     output$grade_plot <- renderPlot({
       # Base plot with LA County boundaries
       base_plot <- ggplot() +
-        geom_polygon(data = la_county, aes(x = long, y = lat, group = group), color = "black", fill = "lightgray") +
-        theme_minimal()
+        geom_polygon(data = la_county, aes(x = long, y = lat, group = group), color = "darkgrey", fill = "white") +
+        theme_void()
 
       # Add grade polygons
       grade_plot <- base_plot +
