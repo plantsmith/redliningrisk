@@ -5,10 +5,10 @@ library(sf)
 library(here)
 library(bslib)
 library(maps)
+library(tidycensus)
 
 ### basemap
 la_county <- map_data("county", "california") %>% filter(subregion == "los angeles")
-
 
 ###NAT'S ZONE - STAY OUT###
 # Load in new datasets
@@ -29,6 +29,36 @@ enviroscreen <- readxl::read_xlsx(here('data',
                                        'calenviroscreen_data_dictionary_2021.xlsx')) %>%
   janitor::clean_names()
 
+#Census data:
+la_census <- tidycensus::get_acs(
+  state = "CA",
+  county = "Los Angeles",
+  geography = "tract",
+  variables = "B25004_001",
+  geometry = TRUE,
+  year = 2022
+)
+
+#filter the data:
+
+la_census_filter <- la_census %>%
+  mutate(NAME = gsub(", Los Angeles County, California", # elements that you want to remove
+                     "", # replace with blank
+                     NAME)) %>%
+  mutate(NAME = gsub("Census Tract ", # elements that you want to remove
+                     "", # replace with blank
+                     NAME)) %>%
+  filter(GEOID != "06037599100") %>% # islands
+  filter(GEOID != "06037599000") %>% # islands
+  filter(GEOID != "06037980003") %>%
+  filter(GEOID != "06037980004") %>%
+  filter(!(NAME >= 9000 & NAME <= 9800))
+
+#plot it
+
+ggplot() +
+  geom_sf(data=la_census_filter, aes(fill=estimate))
+
 # Heat.Gov Surface Models:
 
 heat_island_effects<- read_sf(here('data',
@@ -36,7 +66,7 @@ heat_island_effects<- read_sf(here('data',
                                    'heat_island_effects_la.shp')) %>%
   janitor::clean_names()
 
-####### REDLINING DATA STUFF #####
+# REDLINING
 redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
   janitor::clean_names() %>%
   filter(city == "Los Angeles") %>%
@@ -119,7 +149,6 @@ ui <- fluidPage(theme=bs_theme(bootswatch = 'yeti'),
 ) ### end fluidPage
 
 
-
 ### REACTIVE GRAPH ###
 
 server <-
@@ -131,7 +160,6 @@ server <-
     grade_select <- reactive({
       redline_grade <- redlining_sf %>%
         filter(grade %in% input$grades)
-
 
       return(redline_grade)
     }) ### end grade_select
