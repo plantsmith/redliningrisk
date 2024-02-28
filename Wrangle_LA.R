@@ -101,3 +101,4 @@ enviroscreen_redline %>%
   drop_na() %>%
   group_by(class1) %>%
   summarize(mean_canopy = mean(existing_canopy_pct))
+

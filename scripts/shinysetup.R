@@ -12,8 +12,6 @@ library(maps)
 ### basemap
 la_county <- map_data("county", "california") %>% filter(subregion == "los angeles")
 
-
-###NAT'S ZONE - STAY OUT###
 # Load in new datasets
 
 # Tree Canopy Cover (2016):
