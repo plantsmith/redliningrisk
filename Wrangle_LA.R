@@ -88,12 +88,17 @@ heatrisk_sf <- read_sf(here('data','HeatRisk_7.7.2022','ziplevel_heatmap_0707202
   janitor::clean_names()
 
 # set crs to match enviroscreen dataset
-heatrisk_zips <- st_transform(heatrisk_sf, st_crs(enviroscreen_final))
+heatrisk_zips <- st_transform(heatrisk_sf, st_crs(enviroscreen_final)) %>%
+  st_drop_geometry() %>%
+  mutate(zip = as.numeric(zcta))
+
+# join with enviroscreen dataset based on zip
+enviroscreen_heat <- left_join(enviroscreen_redline, heatrisk_zips, by = join_by("zip" == "zip"))
 
 ### CHECK PLOT
-heatrisk_zips %>%
+enviroscreen_heat %>%
   ggplot() +
-  geom_sf() +
+  geom_sf(aes(fill = zip_pct_64, color = class1)) +
   theme_void()
 
 enviroscreen_redline %>%
