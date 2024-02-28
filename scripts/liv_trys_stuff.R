@@ -35,6 +35,10 @@ enviroscreen_sf <- read_sf(here("data",
   filter(tract != 6037599000) %>% # islands
   filter(tract != 6037980003) # unincorporated
 
+enviroscreen_sf %>%
+ggplot() +
+  geom_sf(fill = "lightgray", color = "black") +
+  theme_void()
 
 
 
@@ -135,6 +139,11 @@ enviroscreen_la <- st_transform(enviroscreen_sf, st_crs(la_census_tracts))
 
 st_crs(la_census_tracts) == st_crs(enviroscreen_la)
 
+unique(canopy_coverage$geoid20)
+test <- inner_join(enviroscreen_la, canopy_coverage, by = join_by(tract == geoid20))
+test %>%
+  ggplot() +
+  geom_sf(aes(fill = existing_canopy_pct))
 
 enviroscreen_la %>%
   ggplot() +
@@ -143,7 +152,21 @@ enviroscreen_la %>%
   geom_sf(data = redlining_sf, aes(color = grade), fill = NA) +
   theme_void()
 
-test <- inner_join(enviroscreen_la, canopy_coverage, by = join_by(tract == geoid20))
-test %>%
+enviroscreen_la %>%
   ggplot() +
-  geom_sf(aes(fill = existing_canopy_pct))
+  geom_sf(data = test, aes(fill = existing_canopy_pct, color = existing_canopy_pct)) +
+  theme_void()
+
+join_test <- st_filter(enviroscreen_la, la_census_tracts)
+
+enviroscreen_final <- join_test %>%
+  filter(tract != 6037930101) %>%
+  filter(tract != 6037930301) %>%
+  filter(tract != 6037930200) %>%
+  filter(tract != 6037920303)
+
+
+ggplot() +
+  geom_sf(fill = "gray") +
+  theme_void()
+
