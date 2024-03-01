@@ -101,9 +101,14 @@ enviroscreen_heat %>%
   geom_sf(aes(fill = zip_pct_64, color = class1)) +
   theme_void()
 
-enviroscreen_redline %>%
+enviroscreen_heat %>%
   st_drop_geometry() %>%
   drop_na() %>%
   group_by(class1) %>%
-  summarize(mean_canopy = mean(existing_canopy_pct))
+  summarize(n = n(),
+            mean_canopy = mean(existing_canopy_pct),
+            mean_heat = mean(zip_pct_64),
+            mean_white = mean(white),
+            mean_poverty = mean(poverty_p),
+            mean_asthma = mean(asthma_p))
 
