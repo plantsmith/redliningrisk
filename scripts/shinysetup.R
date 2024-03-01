@@ -6,42 +6,9 @@ library(here)
 library(bslib)
 library(maps)
 
-#2/23/24:
-#TO DO: wrangle all datasets and join. filter tree dataset
-
-### basemap
-la_county <- map_data("county", "california") %>% filter(subregion == "los angeles")
-
-# Load in new datasets
-
-# Tree Canopy Cover (2016):
-canopy_coverage <- read_csv(here('data/tree_canopy_cover2016.csv')) %>%
-  janitor::clean_names()
-
-# City Tree - LA Parks n Rec:
-city_trees <- read_sf(here('data',
-                           'city_trees_rec_and_park',
-                           'city_trees_rec_and_park.shp')) %>%
-  janitor::clean_names()
-
-# CA Enviroscreen Data Dictionary:
-enviroscreen <- readxl::read_xlsx(here('data',
-                                       'calenviroscreen_data_dictionary',
-                                       'calenviroscreen_data_dictionary_2021.xlsx')) %>%
-  janitor::clean_names()
-
-# Heat.Gov Surface Models:
-
-heat_island_effects<- read_sf(here('data',
-                                   'heat_island_effects_la',
-                                   'heat_island_effects_la.shp')) %>%
-  janitor::clean_names()
-
-####### REDLINING DATA STUFF #####
-redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
-   janitor::clean_names() %>%
-   filter(city == "Los Angeles") %>%
-   drop_na()
+## get our data
+# enviroscreen_final <- read_sf(here('data', 'enviroscreen_final.shp'))
+enviroscreen_final <- enviroscreen_heat
 
 
   ### Create the user interface:
@@ -63,15 +30,29 @@ redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
         sidebarLayout(
           sidebarPanel("",
                        checkboxGroupInput(
-                         inputId = "grades",
+                         inputId = "class1",
                          label = "Choose Area Category",
                          choices = c("Best" = "A",
                                      "Still Desirable" = "B",
                                      "Definitely Declining" = "C" ,
                                      "Hazardous" = "D"),
-                         selected = 1),
+                         selected = 1), # <- Closed checkboxGroupInput
 
+                       sliderInput(
+                         inputId = "canopy",
+                         label = "Canopy Coverage (%)",
+                         min = 0,
+                         max = 70,
+                         value = 0
+                       ), # <- Closed sliderInput
 
+                       sliderInput(
+                         inputId = "poverty",
+                         label = "Poverty (%)",
+                         min = 0,
+                         max = 95,
+                         value = 0
+                       ) # <- Closed sliderInput
           ), ### end sidebarPanel
 
           mainPanel("Output graph (will have interactive basemap, redlining zones, green space/canopy cover, social indices). Below the graph will be our summary table, which will show mean values for green space/canopy cover and social indices as they're selected",
@@ -110,45 +91,54 @@ redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
 
      server <-
 
-       function(input, output) {
+      function(input, output) {
 
-       #bs_themer()
+       grade_select <- reactive({
+       redline_grade <- enviroscreen_final %>%
+          filter(class1 %in% input$class1)
+       return(redline_grade)
 
-      grade_select <- reactive({
-      redline_grade <- redlining_sf %>%
-          filter(grade %in% input$grades)
-
-
-        return(redline_grade)
       }) ### end grade_select
 
-      grade_cols <- c("A" = "green", "B" = "blue", "C" = "orange", "D" = "red")
+       canopy_select <- reactive({
+         canopy_tracts <- enviroscreen_final %>%
+           filter(existing_canopy_pct < input$canopy)
+         return(canopy_tracts)
+       }) ### end canopy_select
+
+       poverty_select <- reactive({
+         poverty_tracts <- enviroscreen_final %>%
+           filter(poverty < input$poverty)
+         return(poverty_tracts)
+      }) ### end poverty_select
+
+
+      grade_colors <- c("A" = "green", "B" = "blue", "C" = "orange", "D" = "red")
+      # canopy_colors <- ifelse(enviroscreen_final$existing_canopy_pct <30, "lightgreen", "darkgreen")
 
       output$grade_plot <- renderPlot({
         # Base plot with LA County boundaries
         base_plot <- ggplot() +
-          geom_polygon(data = la_county, aes(x = long, y = lat, group = group), color = "black", fill = "lightgrey") +
-          geom_sf(data = city_trees, aes(), color = "darkgreen", size = 0.1) +
-          theme_minimal()
+          geom_sf(data = enviroscreen_final, color = "black", fill = "lightgrey") +
+          # geom_sf(data = city_trees, aes(), color = "darkgreen", size = 0.1) +
+          theme_void()
 
         # Add grade polygons
         grade_plot <- base_plot +
-          geom_sf(data = grade_select(), aes(fill = grade)) +
-          scale_fill_manual(values = grade_cols) +
-          labs(x = "Longitude",
-               y = "Latitude",
-               fill = "Grade")
+          geom_sf(data = canopy_select(), aes(fill = "canopy"), alpha = 0.3) +
+          geom_sf(data = poverty_select(), aes(fill = "poverty"), alpha = 0.3) +
+          geom_sf(data = grade_select(), aes(color = class1), fill = NA) +
+          scale_fill_manual(values = c("canopy" = "green3", "poverty" = "purple")) +
+          scale_color_manual(values = grade_colors) +
+          labs(color = "Redlining Grade")
 
         grade_plot
-      }) ### end grade_plot
+      }) ### end grade_plot output
 
     } ### end server
 
 ### Combine them into an app:
 shinyApp(ui = ui, server = server)
 
-# ggplot() +
-#   geom_polygon(data = la_county, aes(x = long, y = lat, group = group), color = "black", fill = "lightgray") +
-#   geom_sf(data = city_trees, aes(), color = "darkgreen", size = 0.1) +
-#   theme_void()
+
 

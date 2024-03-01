@@ -45,13 +45,14 @@ enviroscreen_sf <- read_sf(here("data",
   filter(tract != 6037930101) %>% # forests, unincorporated areas, etc
   filter(tract != 6037930301) %>%
   filter(tract != 6037930200) %>%
-  filter(tract != 6037920303)
+  filter(tract != 6037920303) %>%
+  mutate(across(c_iscore:other_mult, ~replace(., . < 0, NA)))
 
 # set crs to be the same as la census tracts
 enviroscreen_sf <- st_transform(enviroscreen_sf, st_crs(la_census_filter))
 
 # filter out northern areas so we just have LA itself left
-enviroscreen_final <- st_filter(enviroscreen_sf, la_census_filter)
+enviroscreen_clean <- st_filter(enviroscreen_sf, la_census_filter)
 
 
 ### Step 3: Canopy coverage data
@@ -60,7 +61,7 @@ canopy_coverage <- read_csv(here('data/tree_canopy_cover2016.csv')) %>%
   janitor::clean_names()
 
 # left join with enviroscreen dataset
-enviroscreen_canopy <- left_join(enviroscreen_final, canopy_coverage, by = join_by("tract" == "geoid20"))
+enviroscreen_canopy <- left_join(enviroscreen_clean, canopy_coverage, by = join_by("tract" == "geoid20"))
 
 
 ### Step 4: Redlining data
@@ -71,7 +72,7 @@ redlining_sf <- read_sf(here('data/mappinginequality.gpkg')) %>%
   drop_na()
 
 # set crs to be the same as our enviroscreen dataset
-redlining_sf <- st_transform(redlining_sf, st_crs(enviroscreen_final))
+redlining_sf <- st_transform(redlining_sf, st_crs(enviroscreen_clean))
 
 # how could we join redlining with our other datasets if everything else is census tract, and this isn't??
 # get data for redlining applied to modern day census tracts
@@ -88,12 +89,15 @@ heatrisk_sf <- read_sf(here('data','HeatRisk_7.7.2022','ziplevel_heatmap_0707202
   janitor::clean_names()
 
 # set crs to match enviroscreen dataset
-heatrisk_zips <- st_transform(heatrisk_sf, st_crs(enviroscreen_final)) %>%
+heatrisk_zips <- st_transform(heatrisk_sf, st_crs(enviroscreen_clean)) %>%
   st_drop_geometry() %>%
   mutate(zip = as.numeric(zcta))
 
 # join with enviroscreen dataset based on zip
 enviroscreen_heat <- left_join(enviroscreen_redline, heatrisk_zips, by = join_by("zip" == "zip"))
+
+### Step 6: Save final dataset
+st_write(enviroscreen_heat, here('data', 'enviroscreen_final.shp'), append = FALSE)
 
 ### CHECK PLOT
 enviroscreen_heat %>%
