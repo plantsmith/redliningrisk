@@ -68,7 +68,7 @@ enviroscreen_final <- enviroscreen_heat
         p('This is our second data tab, containing a histogram'),
         sidebarLayout(
           sidebarPanel("",
-                       radioButtons(inputId = "class1",
+                       radioButtons(inputId = "grade",
                        label = "Choose Area Category",
                        choices = c("Best" = "A",
                                    "Still Desirable" = "B",
@@ -111,6 +111,13 @@ enviroscreen_final <- enviroscreen_heat
        return(redline_grade)
 
       }) ### end grade_select
+
+       grade_select_hist <- reactive({
+         redline_grade <- enviroscreen_final %>%
+           filter(class1 %in% input$grade)
+         return(redline_grade)
+
+       }) ### end grade_select_hist
 
        canopy_select <- reactive({
          canopy_tracts <- enviroscreen_final %>%
@@ -159,21 +166,21 @@ enviroscreen_final <- enviroscreen_heat
 
       output$hist_poverty <- renderPlot({
        ggplot() +
-          geom_histogram(data = grade_select(),
+          geom_histogram(data = grade_select_hist(),
                          aes(x = poverty)) +
           theme_minimal()
       }) ### end hist_poverty output
 
       output$hist_canopy <- renderPlot({
         ggplot() +
-          geom_histogram(data = grade_select(),
+          geom_histogram(data = grade_select_hist(),
                          aes(x = existing_canopy_pct)) +
           theme_minimal()
       }) ### end hist_canopy output
 
       output$hist_heatER <- renderPlot({
         ggplot() +
-          geom_histogram(data = grade_select(),
+          geom_histogram(data = grade_select_hist(),
                          aes(x = zip_pct_64)) +
           labs(x = "excess ER visits on hot days") +
           theme_minimal()
