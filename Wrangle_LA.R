@@ -116,3 +116,8 @@ enviroscreen_heat %>%
             mean_poverty = mean(poverty_p),
             mean_asthma = mean(asthma_p))
 
+enviroscreen_heat %>%
+  st_drop_geometry() %>%
+  select(poverty) %>%
+  ggplot() +
+  geom_histogram(aes(x = poverty))
