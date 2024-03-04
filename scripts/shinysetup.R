@@ -55,9 +55,10 @@ enviroscreen_final <- enviroscreen_heat
                        ) # <- Closed sliderInput
           ), ### end sidebarPanel
 
-          mainPanel("Output graph (will have interactive basemap, redlining zones, green space/canopy cover, social indices). Below the graph will be our summary table, which will show mean values for green space/canopy cover and social indices as they're selected",
+          mainPanel("Output graph. Below the graph is our summary table",
 
-                    plotOutput(outputId = "grade_plot"))
+                    plotOutput(outputId = "grade_plot"),
+                    tableOutput("summary_table"))
 
         ), ### end sidebarLayout
         ), ### end tab 2
@@ -66,10 +67,21 @@ enviroscreen_final <- enviroscreen_heat
         title = 'Histograms',
         p('This is our second data tab, containing a histogram'),
         sidebarLayout(
-          sidebarPanel("widget here: select one of our data variables"
+          sidebarPanel("",
+                       radioButtons(inputId = "grade",
+                       label = "Choose Area Category",
+                       choices = c("Best" = "A",
+                                   "Still Desirable" = "B",
+                                   "Definitely Declining" = "C" ,
+                                   "Hazardous" = "D"),
+                       selected = 1)
 
           ),
-          mainPanel("histogram here: show distribution of data values by census tract"
+          mainPanel("histogram here: show distribution of data values by census tract",
+
+                    plotOutput(outputId = "hist_poverty"),
+                    plotOutput(outputId = "hist_canopy"),
+                    plotOutput(outputId = "hist_heatER")
 
           )
         ) ### end sidebarLayout
@@ -100,6 +112,13 @@ enviroscreen_final <- enviroscreen_heat
 
       }) ### end grade_select
 
+       grade_select_hist <- reactive({
+         redline_grade <- enviroscreen_final %>%
+           filter(class1 %in% input$grade)
+         return(redline_grade)
+
+       }) ### end grade_select_hist
+
        canopy_select <- reactive({
          canopy_tracts <- enviroscreen_final %>%
            filter(existing_canopy_pct < input$canopy)
@@ -111,7 +130,6 @@ enviroscreen_final <- enviroscreen_heat
            filter(poverty < input$poverty)
          return(poverty_tracts)
       }) ### end poverty_select
-
 
       grade_colors <- c("A" = "green", "B" = "blue", "C" = "orange", "D" = "red")
       # canopy_colors <- ifelse(enviroscreen_final$existing_canopy_pct <30, "lightgreen", "darkgreen")
@@ -134,6 +152,39 @@ enviroscreen_final <- enviroscreen_heat
 
         grade_plot
       }) ### end grade_plot output
+
+      output$summary_table <- renderTable(
+        means_table <- enviroscreen_final %>%
+          st_drop_geometry() %>%
+          drop_na() %>%
+          group_by(class1) %>%
+          summarize(n = n(),
+                    mean_canopy = mean(existing_canopy_pct),
+                    mean_heatER = mean(zip_pct_64),
+                    mean_poverty = mean(poverty))
+        ) ### end summary_table output
+
+      output$hist_poverty <- renderPlot({
+       ggplot() +
+          geom_histogram(data = grade_select_hist(),
+                         aes(x = poverty)) +
+          theme_minimal()
+      }) ### end hist_poverty output
+
+      output$hist_canopy <- renderPlot({
+        ggplot() +
+          geom_histogram(data = grade_select_hist(),
+                         aes(x = existing_canopy_pct)) +
+          theme_minimal()
+      }) ### end hist_canopy output
+
+      output$hist_heatER <- renderPlot({
+        ggplot() +
+          geom_histogram(data = grade_select_hist(),
+                         aes(x = zip_pct_64)) +
+          labs(x = "excess ER visits on hot days") +
+          theme_minimal()
+      }) ### end hist_heatER output
 
     } ### end server
 
