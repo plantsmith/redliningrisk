@@ -97,7 +97,7 @@ heatrisk_zips <- st_transform(heatrisk_sf, st_crs(enviroscreen_clean)) %>%
 enviroscreen_heat <- left_join(enviroscreen_redline, heatrisk_zips, by = join_by("zip" == "zip"))
 
 ### Step 6: Save final dataset
-st_write(enviroscreen_heat, here('data', 'enviroscreen_final.shp'), append = FALSE)
+st_write(enviroscreen_heat, here('data', 'enviroscreen_final.gpkg'), append = FALSE)
 
 ### CHECK PLOT
 enviroscreen_heat %>%
