@@ -121,3 +121,16 @@ enviroscreen_heat %>%
   select(poverty) %>%
   ggplot() +
   geom_histogram(aes(x = poverty))
+
+enviroscreen_final %>%
+  st_drop_geometry() %>%
+  filter(class1 == "D") %>%
+  select(class1, white, hispanic, african_am, aapi, native_am, other_mult) %>%
+  pivot_longer(cols = white:other_mult, names_to = "race", values_to = "percent") %>%
+  drop_na() %>%
+  group_by(class1, race) %>%
+  summarize(mean_percent = mean(percent)) %>%
+  ggplot(aes(x = "", y = mean_percent, fill = race)) +
+  geom_bar(stat="identity", width=1) +
+  coord_polar("y", start=0) +
+  theme_void()
