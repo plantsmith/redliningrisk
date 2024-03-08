@@ -59,6 +59,8 @@ enviroscreen_final <- st_filter(enviroscreen_sf, la_census_filter)
 canopy_coverage <- read_csv(here('data/tree_canopy_cover2016.csv')) %>%
   janitor::clean_names()
 
+canopy_coverage <- st_layers(here("data/full_canopy"))
+
 # left join with enviroscreen dataset
 enviroscreen_canopy <- left_join(enviroscreen_final, canopy_coverage, by = join_by("tract" == "geoid20"))
 
@@ -106,4 +108,7 @@ enviroscreen_redline %>%
   drop_na() %>%
   group_by(class1) %>%
   summarize(mean_canopy = mean(existing_canopy_pct))
+
+
+
 
