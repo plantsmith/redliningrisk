@@ -118,7 +118,19 @@ ui <- fluidPage(
 
     tabPanel(
       title = 'PCA',
+      sidebarLayout(
+        sidebarPanel("Select location blah blah blah",
+                     radioButtons(inputId = "loc",
+                                  label = strong("Choose Location"),
+                                  choices = c("Los Angeles",
+                                              "Long Beach"),
+                                  selected = "Los Angeles")
 
+        ),
+        mainPanel(
+          plotOutput("pca_plot")
+        )
+      ) ### end sidebarLayout
     ), ### end tab 5
 
     tabPanel(

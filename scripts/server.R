@@ -126,4 +126,25 @@ server <-function(input, output) {
         theme_void()
     })
 
+
+    ###PCA###
+
+    pca <- reactive({
+      clean_screen %>%
+        filter(approx_loc %in% input$loc) %>%
+        select(where(is.numeric)) %>%
+        prcomp(scale = TRUE)
+    })
+
+    output$pca_plot <- renderPlot({
+      autoplot(pca(),
+             data = clean_screen,
+             loadings = TRUE,
+             loadings.label = TRUE,
+             loadings.colour = "black",
+             loadings.label.colour = "black",
+             loadings.label.vjust = -0.5)+
+      theme_minimal()
+  })
+
   } ### end server
