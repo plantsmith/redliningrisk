@@ -1,3 +1,0 @@
-## `intro_text.txt`
-
-here is some intro text....using the includeText will include this file as formattes as basic HTML text, but this format doesn't give much flexibility for formatting.
