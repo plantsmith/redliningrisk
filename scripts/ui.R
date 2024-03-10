@@ -15,31 +15,54 @@ ui <- fluidPage(
              fluidRow(
                column(width = 8,
                       h4(strong("PURPOSE"), style = "text-align:justify;color:black"),
-                      p("Enter Text Here"), # End paragraph 1
+                      p("Enter Text Here", style = "font-size: 10pt;"), # End paragraph 1
                       br(), # Line break
+
                       h4(strong("WHAT IS REDLINING"), style = "text-align:justify;color:black"),
-                      p("The Home Owner's Loan Corporation (HOLC), established during the New Deal to stabilize the housing market amidst the Great Depression, aimed to assist struggling homeowners. However.....ADD THE REST"),
+                      p("The Home Owners' Loan Corporation (HOLC), established during the New Deal to stabilize the housing market amidst the Great Depression, aimed to assist struggling homeowners. However, HOLC's operations also perpetuated racial discrimination in mortgage lending, reflecting prevailing attitudes of the time.",
+                        br(),
+                        br(),
+                        "Between 1935 and 1940, HOLC created area descriptions and color-coded maps to evaluate neighborhoods' mortgage security. HOLC's criteria included housing quality, property values, and residents' racial and ethnic backgrounds. These maps categorized areas into four types: 'Type A' neighborhoods outlined in green were considered the most desirable for lending, typically affluent suburbs; 'Type B' neighborhoods outlined in blue were still desirable; 'Type C' neighborhoods outlined in yellow were declining, and 'Type D' neighborhoods outlined in red were the riskiest for mortgage support, often older districts in city centers and predominantly Black.",
+                        br(),
+                        br(),
+                        "These grades were used for redlining, restricting mortgage financing and homeownership opportunities, particularly in communities of color. These discriminatory practices continue to shape urban inequality today.",
+                        style = "font-size: 10pt;"), # Adjusting font size
                       br(),
-                      p("TEST"),
-                      br(),
+
                       h4(strong("ENVIRONMENTAL IMPLICATIONS"), style = "text-align:justify;color:black;background-color:#8EC7D2;padding:15px;border-radius:10px"),
-                      p("ADD THE REST"),
+                      p("Environmental disparities in American cities reflect historic redlining policies that favored wealthy, predominantly white neighborhoods over poorer, often minority communities. A study led by scientists in 2017-2018 used HOLC redlining maps to investigate the link between discriminatory housing practices and contemporary environmental stressors, particularly heat islands. They found that areas previously redlined by HOLC were significantly hotter than greenlined neighborhoods during summer months, mainly due to differences in surface materials and tree canopy coverage. Subsequent research has confirmed these findings, highlighting the enduring impact of past discriminatory policies on present-day environmental inequalities and public health outcomes.",
+                        style = "font-size: 10pt;"), # Adjusting font size
                       br(),
-                      p("TEST"),
-                      br(),
+
                       h4(strong("HEALTH IMPLICATIONS"), style = "text-align:justify;color:black;background-color:#8EC7D2;padding:15px;border-radius:10px"),
-                      p("The Home Owner's Loan Corporation (HOLC), established during the New Deal to stabilize the housing market amidst the Great Depression, aimed to assist struggling homeowners. However.....ADD THE REST"),
+                      p("The mechanisms through which historic redlining influences present-day public health are an ongoing topic of study. Potential contributing factors include economic isolation, disparate property valuation, and environmental exposures.",
+                        br(),
+                        br(),
+                        "Research on redlining and health has intensified since the digitization of HOLC maps, revealing associations between redlined areas and various health indicators such as mortality, pre-term birth, cardiovascular disease, and COVID-19 infection burden. Redlining has also been linked to environmental determinants of health, such as air pollution and access to healthcare services.",
+                        style = "font-size: 10pt;"), # Adjusting font size
                       br(),
-                      p("TEST"),
-                      br() # end of background section
+                      # end of background section
+               ),
+               column(width = 4,
+                      # Content for the second column
+                      img(src = "redlining-la.jpeg", width = "100%"),
+                      p(em("HOLC map of  Los Angeles County, 1939. Image from  Mapping Inequality,University of Richmond's Digital Scholarship Lab."),
+                        style = "text-align: center; font-size:12px"), # end photo text
+                      br(), # Line break
+                      img(src = "your_image2.jpeg", width = "100%"),
+                      p(em("TBD"),
+                        style = "text-align: center; font-size:12px"), # end photo text
+                      br(), # Line break
+                      img(src = "your_image3.jpeg", width = "100%"),
+                      p(em("TBD"),
+                        style = "text-align: center; font-size:12px"), # end photo text
                )
              ), # end fluidrow 1
 
              # "Developed by" section added here
-             p(em("Developed by"),br("Olivia Hemond and Natalie Smith"),style="text-align:center;color:black"),
+             p(em("Developed by"), br("Olivia Hemond and Natalie Smith"), style = "font-size: 10pt; text-align: center; color: black;"),
              br()
     ),
-
     ############################MAP##########################################
     tabPanel("Map",
              sidebarLayout(
@@ -69,6 +92,7 @@ ui <- fluidPage(
                )
              )
     ),
+
     ############################HEALTH###########################################
     tabPanel("Health Indicators",
              sidebarLayout(
@@ -94,6 +118,7 @@ ui <- fluidPage(
                )
              )
     ),
+
     ############################DEMOGRAPHICS###########################################
     tabPanel("Demographics",
              sidebarLayout(
@@ -114,6 +139,7 @@ ui <- fluidPage(
                )
              )
     ),
+
     tabPanel("PCA",
              sidebarLayout(
                sidebarPanel(
@@ -130,6 +156,7 @@ ui <- fluidPage(
                )
              )
     ),
+
     ############################CITE###########################################
     tabPanel("Data & Resources",
              includeMarkdown('citations.md')
