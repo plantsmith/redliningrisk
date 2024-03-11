@@ -1,5 +1,13 @@
 ### REACTIVE GRAPH ###
 
+server <- function(input, output, session) {
+  output$la_skyline <- renderImage({
+    list(src = "la-skyline.jpg",
+         alt = "Los Angeles Skyline",
+         width = "100%")
+  }, deleteFile = FALSE)
+}
+
 server <-function(input, output) {
 
     grade_select <- reactive({
@@ -85,47 +93,65 @@ server <-function(input, output) {
     ### end summary_table output
 
     output$hist_poverty <- renderPlot({
-      ggplot() +
-        geom_histogram(data = grade_select_hist(),
-                       aes(x = poverty), fill = "purple") +
-        theme_minimal()
-    }) ### end hist_poverty output
+      ggplot(data = grade_select_hist(), aes(x = poverty)) +
+        geom_histogram(fill = "purple", color = "black", bins = 20) +
+        labs(x = "Poverty", y = "Frequency", title = " ") +
+        theme_minimal() +
+        theme(axis.text = element_text(size = 10),
+              axis.title = element_text(size = 12, face = "bold"),
+              plot.title = element_text(size = 14, face = "bold"))
+    })
 
     output$hist_canopy <- renderPlot({
-      ggplot() +
-        geom_histogram(data = grade_select_hist(),
-                       aes(x = existing_canopy_pct), fill = "darkgreen") +
-        theme_minimal()
-    }) ### end hist_canopy output
+      ggplot(data = grade_select_hist(), aes(x = existing_canopy_pct)) +
+        geom_histogram(fill = "darkgreen", color = "black", bins = 20) +
+        labs(x = "Existing Canopy Percentage", y = "Frequency", title = " ") +
+        theme_minimal() +
+        theme(axis.text = element_text(size = 10),
+              axis.title = element_text(size = 12, face = "bold"),
+              plot.title = element_text(size = 14, face = "bold"))
+    })
 
     output$hist_heatER <- renderPlot({
-      ggplot() +
-        geom_histogram(data = grade_select_hist(),
-                       aes(x = zip_pct_64), fill = "red4") +
-        labs(x = "excess ER visits on hot days") +
-        theme_minimal()
-    }) ### end hist_heatER output
+      ggplot(data = grade_select_hist(), aes(x = zip_pct_64)) +
+        geom_histogram(fill = "red4", color = "black", bins = 20) +
+        labs(x = "Excess ER Visits on Hot Days", y = "Frequency", title = " ") +
+        theme_minimal() +
+        theme(axis.text = element_text(size = 10),
+              axis.title = element_text(size = 12, face = "bold"),
+              plot.title = element_text(size = 14, face = "bold"))
+    })
+
+
+    # Rename race
+    race_pie <- c("white" = "White", "hispanic" = "Hispanic", "african_am" = "African American",
+                  "aapi" = "Asian/Pacific Islander", "native_am" = "Native American",
+                  "other_mult" = "Other/Multiracial")
 
     pie_df <- reactive({
       enviroscreen_final %>%
-      st_drop_geometry() %>%
-      filter(class1 %in% input$grade_pie) %>%
-      select(class1, white, hispanic, african_am, aapi, native_am, other_mult) %>%
-      pivot_longer(cols = white:other_mult, names_to = "race", values_to = "percent") %>%
-      drop_na() %>%
-      group_by(class1, race) %>%
-      summarize(mean_percent = mean(percent))
-      })
-
-    demographic_colors <- c("dodgerblue", "goldenrod2", "goldenrod4", "darkorange", "royalblue3", "slategrey")
-    output$pie <- renderPlot({
-      ggplot(data = pie_df(), aes(x = "", y = mean_percent, fill = race)) +
-        geom_bar(stat="identity", width=1) +
-        coord_polar("y", start=0) +
-        scale_fill_manual(values = demographic_colors) +
-        theme_void()
+        st_drop_geometry() %>%
+        filter(class1 %in% input$grade_pie) %>%
+        select(class1, white, hispanic, african_am, aapi, native_am, other_mult) %>%
+        pivot_longer(cols = white:other_mult, names_to = "race", values_to = "percent") %>%
+        drop_na() %>%
+        group_by(class1, race) %>%
+        summarize(mean_percent = mean(percent)) %>%
+        mutate(race = race_pie[race])
     })
 
+    # Color palette
+    demographic_colors <- c("#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854", "#ffd92f")
+
+    output$pie <- renderPlot({
+      ggplot(data = pie_df(), aes(x = "", y = mean_percent, fill = race)) +
+        geom_bar(stat = "identity", width = 1) +
+        coord_polar("y", start = 0) +
+        scale_fill_manual(values = demographic_colors) +
+        theme_void() +
+        theme(legend.position = "right") +  # Moving legend to the right
+        labs(title = "Distribution of Demographics", fill = "Race")  # Adding title and legend title
+    })
 
     ###PCA###
 

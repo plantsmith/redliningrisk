@@ -18,7 +18,7 @@ ui <- fluidPage(
              # Adding an image to the front page
              imageOutput("la-skyline"),
 
-             # Adding text beneath photo for credits
+             # photocredits
              p(em("Ariel view of Los Angeles. Photo by RMDE Photo Archive."), style="text-align: center; font-size:12px"
              ), # end photo text
              hr(), # horizontal line break
