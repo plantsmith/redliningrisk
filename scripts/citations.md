@@ -6,7 +6,7 @@ Changes in neighborhood boundaries over the past century have obscured the full 
 
 -   Census/Health Data: California Office of Environmental Health Hazard Assessment. “CalEnviroScreen 4.0” <https://oehha.ca.gov/calenviroscreen/maps-data/download-data>. February 2024.
 
--   Canopy Coverage Data: Loyola Marymount University. DATE. “Tree Canopy Coverage”. March 2024.
+-   Canopy Coverage Data: Loyola Marymount University. “Tree Canopy Coverage”. March 2024.
 
 -   Modern Redlining Data: diversitydatakids.org. 2023. “Home Owner Loan Corporation (HOLC) neighborhood grades for US census. <https://data.diversitydatakids.org/dataset/holc_census_tracts-home-owner-loan-corporation--holc--neighborhood-grades-for-us-census-tracts?_external=True> on Mar 03 2024, based on HOLC maps digitized by the Digital Scholarship Lab at the University of Richmond
 

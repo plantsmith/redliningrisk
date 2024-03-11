@@ -16,16 +16,16 @@ ui <- fluidPage(
   tabsetPanel(
     tabPanel("Home",
              # Adding an image to the front page
-             imageOutput("la-skyline"),
+             img(src="la-skyline.jpg", width = "1300px"),
 
              # photocredits
-             p(em("Ariel view of Los Angeles. Photo by RMDE Photo Archive."), style="text-align: center; font-size:12px"
+             p(em("Aerial view of Los Angeles. Photo by RMDE Photo Archive."), style="text-align: center; font-size:12px"
              ), # end photo text
              hr(), # horizontal line break
 
 
              fluidRow(
-               column(width = 8,
+               column(width = 7,
                       h4(strong("PURPOSE"), style = "text-align:justify;color:black"),
                       p("Enter Text Here", style = "font-size: 10pt;"), # End paragraph 1
                       br(), # Line break
@@ -55,17 +55,17 @@ ui <- fluidPage(
                       br(),
                       # end of background section
                ),
-               column(width = 4,
+               column(width = 5,
                       # Content for the second column
-                      img(src = "redlining-la.jpeg", width = "100%"),
+                      img(src = "holc-redlining-la.jpeg", width = "100%"),
                       p(em("HOLC map of  Los Angeles County, 1939. Image from  Mapping Inequality,University of Richmond's Digital Scholarship Lab."),
                         style = "text-align: center; font-size:12px"), # end photo text
                       br(), # Line break
-                      img(src = "your_image2.jpeg", width = "100%"),
+                      img(src = "legend.png", width = "100%"),
                       p(em("TBD"),
                         style = "text-align: center; font-size:12px"), # end photo text
                       br(), # Line break
-                      img(src = "your_image3.jpeg", width = "100%"),
+                      img(src = "your_image3.jpg", width = "100%"),
                       p(em("TBD"),
                         style = "text-align: center; font-size:12px"), # end photo text
                )

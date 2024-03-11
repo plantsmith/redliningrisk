@@ -1,14 +1,12 @@
 ### REACTIVE GRAPH ###
 
-server <- function(input, output, session) {
+server <-function(input, output) {
+
   output$la_skyline <- renderImage({
     list(src = "la-skyline.jpg",
          alt = "Los Angeles Skyline",
          width = "100%")
   }, deleteFile = FALSE)
-}
-
-server <-function(input, output) {
 
     grade_select <- reactive({
       redline_grade <- enviroscreen_final %>%
@@ -156,15 +154,21 @@ server <-function(input, output) {
     ###PCA###
 
     pca <- reactive({
-      clean_screen %>%
-        filter(approx_loc %in% input$loc) %>%
-        select(where(is.numeric)) %>%
-        prcomp(scale = TRUE)
+      # clean_screen %>%
+      #   filter(approx_loc %in% input$loc) %>%
+      #   select(where(is.numeric)) %>%
+      #   prcomp(scale = TRUE)
     })
 
     output$pca_plot <- renderPlot({
-      autoplot(pca(),
-             data = clean_screen,
+     pca_2 <-  clean_screen %>%
+        filter(approx_loc %in% input$loc) %>%
+        select(where(is.numeric)) %>%
+        prcomp(scale = TRUE)
+      autoplot(pca_2,
+             data = clean_screen %>%
+               filter(approx_loc %in% input$loc),
+             color = "approx_loc",
              loadings = TRUE,
              loadings.label = TRUE,
              loadings.colour = "black",
