@@ -1,4 +1,4 @@
-### Attach necessary packages
+### Attach packages
 library(shiny)
 library(tidyverse)
 library(sf)
@@ -38,4 +38,7 @@ loadings_df <- data.frame(pca_screen$rotation * 8) %>% ### 8x arrows
   mutate(axis = row.names(.))
 
 new_pts_df <- data.frame(pca_screen$x)
+
+
+la_sky<- here("misc","la-skyline.jpg")
 

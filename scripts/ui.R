@@ -1,17 +1,29 @@
-ui <- fluidPage(
-  theme = bs_theme(bootswatch = "yeti"),
 
+# my_theme <- bs_theme(bootswatch = 'vapor') %>%
+#   bs_theme_update(bg = "rgb(235, 175, 175)", fg = "rgb(63, 11, 11)",
+#                   primary = "#B5C142", secondary = "#575155", info = "#103851",
+#                   base_font = font_google("Zilla Slab"), code_font = font_google("Syne Mono"),
+#                   heading_font = font_google("Montserrat Alternates"), font_scale = 1.3)
+#
+# ui <- fluidPage(
+#   theme = my_theme,
+
+ui <- fluidPage(
+  theme = bs_theme(bootswatch = "minty"),
   ############################HOMEPAGE###########################################
   titlePanel(h1("Mapping Heat Risk Inequality")),
 
   tabsetPanel(
     tabPanel("Home",
-             # Content for the home page
-             # Including the image, text, etc.
-             img(src = "la-skyline.jpeg", width = "100%"),
-             p(em("Ariel View of Los Angeles 2023. Image from RDNE Photo Archive"),
-               style = "text-align: center; font-size:12px"), # end photo text
+             # Adding an image to the front page
+             imageOutput("la-skyline"),
+
+             # Adding text beneath photo for credits
+             p(em("Ariel view of Los Angeles. Photo by RMDE Photo Archive."), style="text-align: center; font-size:12px"
+             ), # end photo text
              hr(), # horizontal line break
+
+
              fluidRow(
                column(width = 8,
                       h4(strong("PURPOSE"), style = "text-align:justify;color:black"),
@@ -29,12 +41,12 @@ ui <- fluidPage(
                         style = "font-size: 10pt;"), # Adjusting font size
                       br(),
 
-                      h4(strong("ENVIRONMENTAL IMPLICATIONS"), style = "text-align:justify;color:black;background-color:#8EC7D2;padding:15px;border-radius:10px"),
+                      h4(strong("ENVIRONMENTAL IMPLICATIONS"), style = "text-align:justify;color:black"),
                       p("Environmental disparities in American cities reflect historic redlining policies that favored wealthy, predominantly white neighborhoods over poorer, often minority communities. A study led by scientists in 2017-2018 used HOLC redlining maps to investigate the link between discriminatory housing practices and contemporary environmental stressors, particularly heat islands. They found that areas previously redlined by HOLC were significantly hotter than greenlined neighborhoods during summer months, mainly due to differences in surface materials and tree canopy coverage. Subsequent research has confirmed these findings, highlighting the enduring impact of past discriminatory policies on present-day environmental inequalities and public health outcomes.",
                         style = "font-size: 10pt;"), # Adjusting font size
                       br(),
 
-                      h4(strong("HEALTH IMPLICATIONS"), style = "text-align:justify;color:black;background-color:#8EC7D2;padding:15px;border-radius:10px"),
+                      h4(strong("HEALTH IMPLICATIONS"),  style = "text-align:justify;color:black"),
                       p("The mechanisms through which historic redlining influences present-day public health are an ongoing topic of study. Potential contributing factors include economic isolation, disparate property valuation, and environmental exposures.",
                         br(),
                         br(),
@@ -60,7 +72,7 @@ ui <- fluidPage(
              ), # end fluidrow 1
 
              # "Developed by" section added here
-             p(em("Developed by"), br("Olivia Hemond and Natalie Smith"), style = "font-size: 10pt; text-align: center; color: black;"),
+             p(em("Developed by"), br("Olivia Hemond and Natalie Smith"), style = "font-size: 10pt; text-align: left; color: black;"),
              br()
     ),
     ############################MAP##########################################
