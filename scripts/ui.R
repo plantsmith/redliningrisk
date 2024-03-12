@@ -8,6 +8,7 @@
 # ui <- fluidPage(
 #   theme = my_theme,
 
+
 ui <- fluidPage(
   theme = bs_theme(bootswatch = "minty"),
   ############################HOMEPAGE###########################################
@@ -16,16 +17,16 @@ ui <- fluidPage(
   tabsetPanel(
     tabPanel("Home",
              # Adding an image to the front page
-             imageOutput("la-skyline"),
+             img(src = "la-skyline.jpg", width = "100%"),
 
              # photocredits
-             p(em("Ariel view of Los Angeles. Photo by RMDE Photo Archive."), style="text-align: center; font-size:12px"
+             p(em("Aerial view of Los Angeles. Photo by RMDE Photo Archive."), style = "text-align: center; font-size:12px"
              ), # end photo text
              hr(), # horizontal line break
 
 
              fluidRow(
-               column(width = 8,
+               column(width = 7,
                       h4(strong("PURPOSE"), style = "text-align:justify;color:black"),
                       p("Enter Text Here", style = "font-size: 10pt;"), # End paragraph 1
                       br(), # Line break
@@ -34,7 +35,16 @@ ui <- fluidPage(
                       p("The Home Owners' Loan Corporation (HOLC), established during the New Deal to stabilize the housing market amidst the Great Depression, aimed to assist struggling homeowners. However, HOLC's operations also perpetuated racial discrimination in mortgage lending, reflecting prevailing attitudes of the time.",
                         br(),
                         br(),
-                        "Between 1935 and 1940, HOLC created area descriptions and color-coded maps to evaluate neighborhoods' mortgage security. HOLC's criteria included housing quality, property values, and residents' racial and ethnic backgrounds. These maps categorized areas into four types: 'Type A' neighborhoods outlined in green were considered the most desirable for lending, typically affluent suburbs; 'Type B' neighborhoods outlined in blue were still desirable; 'Type C' neighborhoods outlined in yellow were declining, and 'Type D' neighborhoods outlined in red were the riskiest for mortgage support, often older districts in city centers and predominantly Black.",
+                        "Between 1935 and 1940, HOLC created area descriptions and color-coded maps to evaluate neighborhoods' mortgage security. HOLC's criteria included housing quality, property values, and residents' racial and ethnic backgrounds. These maps categorized areas into four types:",
+                        br(),
+                        br(),
+                        "'Type A' neighborhoods outlined in green were considered the most desirable for lending, typically affluent suburbs;",
+                        br(),
+                        "'Type B' neighborhoods outlined in blue were still desirable;",
+                        br(),
+                        "'Type C' neighborhoods outlined in yellow were declining;",
+                        br(),
+                        "'Type D' neighborhoods outlined in red were the riskiest for mortgage support, often older districts in city centers and predominantly Black and People of Color.",
                         br(),
                         br(),
                         "These grades were used for redlining, restricting mortgage financing and homeownership opportunities, particularly in communities of color. These discriminatory practices continue to shape urban inequality today.",
@@ -55,18 +65,18 @@ ui <- fluidPage(
                       br(),
                       # end of background section
                ),
-               column(width = 4,
+               column(width = 5,
                       # Content for the second column
-                      img(src = "redlining-la.jpeg", width = "100%"),
-                      p(em("HOLC map of  Los Angeles County, 1939. Image from  Mapping Inequality,University of Richmond's Digital Scholarship Lab."),
+                      img(src = "holc-redlining-la.jpeg", width = "100%"),
+                      p(em("HOLC map of Los Angeles County, 1939. Image from Mapping Inequality, University of Richmond's Digital Scholarship Lab."),
                         style = "text-align: center; font-size:12px"), # end photo text
                       br(), # Line break
-                      img(src = "your_image2.jpeg", width = "100%"),
-                      p(em("TBD"),
+                      img(src = "no_trees_crenshaw.jpeg", width = "100%"),
+                      p(em("Crenshaw Blvd, Los Angeles; Photo by Francine Orr / Los Angeles Times"),
                         style = "text-align: center; font-size:12px"), # end photo text
                       br(), # Line break
-                      img(src = "your_image3.jpeg", width = "100%"),
-                      p(em("TBD"),
+                      img(src = "tree_street.jpeg", width = "100%"),
+                      p(em("Alpine Drive, Beverly Hills; Photo by Pernell Quilon"),
                         style = "text-align: center; font-size:12px"), # end photo text
                )
              ), # end fluidrow 1
