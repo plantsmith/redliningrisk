@@ -8,18 +8,17 @@ ui <- fluidPage(
   tabsetPanel(
     tabPanel("Home",
              # Adding an image to the front page
-             img(src = "la-skyline.jpg", height = "70%", width = "70%", align = "center"),
+             HTML('<div style="text-align: center;">
+  <img src="la-skyline.jpg" height="70%" width="70%" alt="Los Angeles Skyline">
+  <p style="font-size: 12px; margin-top: 5px;">Aerial view of Los Angeles. Photo by RMDE Photo Archive.</p></div>'),
 
-             # photocredits
-             p(em("Aerial view of Los Angeles. Photo by RMDE Photo Archive."), style = "text-align: center; font-size:12px"
-             ), # end photo text
              hr(), # horizontal line break
 
 
              fluidRow(
                column(width = 7,
                       h4(strong("PURPOSE"), style = "text-align:justify;color:black"),
-                      p("Enter Text Here", style = "font-size: 11pt;"), # End paragraph 1
+                      p("Enter Text Here", style = "font-size: 12pt;"), # End paragraph 1
                       br(), # Line break
 
                       h4(strong("WHAT IS REDLINING"), style = "text-align:justify;color:black"),
@@ -34,12 +33,12 @@ ui <- fluidPage(
                         tags$li("'Type D' neighborhoods outlined in red were the riskiest for mortgage support, often older districts in city centers and predominantly Black and People of Color."),
                         br(),
                         "These grades were used for redlining, restricting mortgage financing and homeownership opportunities, particularly in communities of color. These discriminatory practices continue to shape urban inequality today.",
-                        style = "font-size: 11pt;"), # Adjusting font size
+                        style = "font-size: 12pt;"), # Adjusting font size
                       br(),
 
                       h4(strong("ENVIRONMENTAL IMPLICATIONS"), style = "text-align:justify;color:black"),
                       p("Environmental disparities in American cities reflect historic redlining policies that favored wealthy, predominantly white neighborhoods over poorer, often minority communities. A study led by scientists in 2017-2018 used HOLC redlining maps to investigate the link between discriminatory housing practices and contemporary environmental stressors, particularly heat islands. They found that areas previously redlined by HOLC were significantly hotter than greenlined neighborhoods during summer months, mainly due to differences in surface materials and tree canopy coverage. Subsequent research has confirmed these findings, highlighting the enduring impact of past discriminatory policies on present-day environmental inequalities and public health outcomes.",
-                        style = "font-size: 11pt;"), # Adjusting font size
+                        style = "font-size: 12pt;"), # Adjusting font size
                       br(),
 
                       h4(strong("HEALTH IMPLICATIONS"),  style = "text-align:justify;color:black"),
@@ -47,7 +46,7 @@ ui <- fluidPage(
                         br(),
                         br(),
                         "Research on redlining and health has intensified since the digitization of HOLC maps, revealing associations between redlined areas and various health indicators such as mortality, pre-term birth, cardiovascular disease, and COVID-19 infection burden. Redlining has also been linked to environmental determinants of health, such as air pollution and access to healthcare services.",
-                        style = "font-size: 11pt;"), # Adjusting font size
+                        style = "font-size: 12pt;"), # Adjusting font size
                       br(),
                       # end of background section
                ),
@@ -85,11 +84,27 @@ ui <- fluidPage(
                                "Hazardous" = "D"),
                    selected = "A"
                  ),
-                 varSelectInput(inputId = "variable_name",
-                                label = strong("Choose Variable"),
-                                data = enviroscreen_trimmed %>% st_drop_geometry(),
-                                selected = "existing_canopy_pct",
-                                multiple = FALSE)
+                 selectInput(inputId = "variable_name",
+                             label = strong("Choose Variable"),
+                             choices = c("Heat ER Visits" = "heat_ER_visits",
+                                         "Canopy Coverage Percentage" = "canopy_pct",
+                                         "Poverty Percentage" = "pct_poverty"),
+                             selected = "existing_canopy_pct",
+                             multiple = FALSE)
+
+            #    selectInput(inputId = "variable_name",
+            # label = strong("Choose Variable"),
+            # choices = c("Heat ER Visits" = "heat_ER_visits",
+            #             "Canopy Coverage Percentage" = "canopy_pct",
+            #             "Poverty Percentage" = "pct_poverty"),
+            # selected = "existing_canopy_pct",
+            # multiple = FALSE)
+
+            # choices = c("Heat ER Visits" = "heat_ER_visits",
+            #             "Canopy Coverage Percentage" = "canopy_pct",
+            #             "Poverty Percentage" = "pct_poverty"),
+
+
                ),
                mainPanel(width = 9,
                          br(),

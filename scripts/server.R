@@ -49,7 +49,9 @@ server <-function(input, output) {
         geom_sf(data = grade_select(), aes(color = class1), fill = NA, linewidth = 0.6) +
         scale_fill_gradient(low = "lightskyblue", high = "navy", na.value = NA) +
         scale_color_manual(values = grade_colors) +
-        labs(color = "Redlining Grade")
+        labs(color = "Redlining Grade")+
+        theme(legend.title = element_text(size = 16),  # Adjust legend title size
+       legend.text = element_text(size = 16))
 
       grade_plot
     }, height = 600, width = 900) ### end grade_plot output
@@ -130,7 +132,9 @@ server <-function(input, output) {
         coord_polar("y", start = 0) +
         scale_fill_manual(values = demographic_colors) +
         theme_void() +
-        theme(legend.position = "right") +  # Moving legend to the right
+        theme(legend.position = "right",  # Moving legend to the right
+              legend.title = element_text(size = 16),  # Adjust legend title size
+              legend.text = element_text(size = 16)) +  # Adjust legend text size
         labs(title = " ", fill = "Race")  # Adding title and legend title
     }, height = 600, width = 900)
 
