@@ -1,23 +1,14 @@
 
-# my_theme <- bs_theme(bootswatch = 'vapor') %>%
-#   bs_theme_update(bg = "rgb(235, 175, 175)", fg = "rgb(63, 11, 11)",
-#                   primary = "#B5C142", secondary = "#575155", info = "#103851",
-#                   base_font = font_google("Zilla Slab"), code_font = font_google("Syne Mono"),
-#                   heading_font = font_google("Montserrat Alternates"), font_scale = 1.3)
-#
-# ui <- fluidPage(
-#   theme = my_theme,
-
 
 ui <- fluidPage(
-  theme = bs_theme(bootswatch = "minty"),
+  theme = bs_theme(bootswatch = "lux"),
   ############################HOMEPAGE###########################################
   titlePanel(h1("Mapping Heat Risk Inequality")),
 
   tabsetPanel(
     tabPanel("Home",
              # Adding an image to the front page
-             img(src = "la-skyline.jpg", width = "100%"),
+             img(src = "la-skyline.jpg", height = "70%", width = "70%", align = "center"),
 
              # photocredits
              p(em("Aerial view of Los Angeles. Photo by RMDE Photo Archive."), style = "text-align: center; font-size:12px"
@@ -28,7 +19,7 @@ ui <- fluidPage(
              fluidRow(
                column(width = 7,
                       h4(strong("PURPOSE"), style = "text-align:justify;color:black"),
-                      p("Enter Text Here", style = "font-size: 10pt;"), # End paragraph 1
+                      p("Enter Text Here", style = "font-size: 11pt;"), # End paragraph 1
                       br(), # Line break
 
                       h4(strong("WHAT IS REDLINING"), style = "text-align:justify;color:black"),
@@ -37,23 +28,18 @@ ui <- fluidPage(
                         br(),
                         "Between 1935 and 1940, HOLC created area descriptions and color-coded maps to evaluate neighborhoods' mortgage security. HOLC's criteria included housing quality, property values, and residents' racial and ethnic backgrounds. These maps categorized areas into four types:",
                         br(),
-                        br(),
-                        "'Type A' neighborhoods outlined in green were considered the most desirable for lending, typically affluent suburbs;",
-                        br(),
-                        "'Type B' neighborhoods outlined in blue were still desirable;",
-                        br(),
-                        "'Type C' neighborhoods outlined in yellow were declining;",
-                        br(),
-                        "'Type D' neighborhoods outlined in red were the riskiest for mortgage support, often older districts in city centers and predominantly Black and People of Color.",
-                        br(),
+                        tags$li("'Type A' neighborhoods outlined in green were considered the most desirable for lending, typically affluent suburbs;"),
+                        tags$li("'Type B' neighborhoods outlined in blue were still desirable;"),
+                        tags$li("'Type C' neighborhoods outlined in yellow were declining;"),
+                        tags$li("'Type D' neighborhoods outlined in red were the riskiest for mortgage support, often older districts in city centers and predominantly Black and People of Color."),
                         br(),
                         "These grades were used for redlining, restricting mortgage financing and homeownership opportunities, particularly in communities of color. These discriminatory practices continue to shape urban inequality today.",
-                        style = "font-size: 10pt;"), # Adjusting font size
+                        style = "font-size: 11pt;"), # Adjusting font size
                       br(),
 
                       h4(strong("ENVIRONMENTAL IMPLICATIONS"), style = "text-align:justify;color:black"),
                       p("Environmental disparities in American cities reflect historic redlining policies that favored wealthy, predominantly white neighborhoods over poorer, often minority communities. A study led by scientists in 2017-2018 used HOLC redlining maps to investigate the link between discriminatory housing practices and contemporary environmental stressors, particularly heat islands. They found that areas previously redlined by HOLC were significantly hotter than greenlined neighborhoods during summer months, mainly due to differences in surface materials and tree canopy coverage. Subsequent research has confirmed these findings, highlighting the enduring impact of past discriminatory policies on present-day environmental inequalities and public health outcomes.",
-                        style = "font-size: 10pt;"), # Adjusting font size
+                        style = "font-size: 11pt;"), # Adjusting font size
                       br(),
 
                       h4(strong("HEALTH IMPLICATIONS"),  style = "text-align:justify;color:black"),
@@ -61,7 +47,7 @@ ui <- fluidPage(
                         br(),
                         br(),
                         "Research on redlining and health has intensified since the digitization of HOLC maps, revealing associations between redlined areas and various health indicators such as mortality, pre-term birth, cardiovascular disease, and COVID-19 infection burden. Redlining has also been linked to environmental determinants of health, such as air pollution and access to healthcare services.",
-                        style = "font-size: 10pt;"), # Adjusting font size
+                        style = "font-size: 11pt;"), # Adjusting font size
                       br(),
                       # end of background section
                ),
@@ -106,9 +92,10 @@ ui <- fluidPage(
                                 multiple = FALSE)
                ),
                mainPanel(width = 9,
+                         br(),
                          "Select redlining categories to see which census tracts in the city were historically assigned that rating.",
                          "Toggle between variables in the data to visualize the areas of the city with higher or lower canopy coverage, percent of the population living in poverty, or number of excessive heat-related ER visits.",
-                         plotOutput(outputId = "grade_plot", width = "100%"),
+                         plotOutput(outputId = "grade_plot", width = "900px", height = "600px"),
                          h5("Average Canopy Cover, % Poverty, and Excessive Heat-Related ER Visits by Redlining Grade"),
                          uiOutput("summary_table")
                )
@@ -131,6 +118,7 @@ ui <- fluidPage(
                  )
                ),
                mainPanel(
+                 br(),
                  h5("Percent of Census Tract Living in Poverty"),
                  plotOutput(outputId = "hist_poverty", height = "200"),
                  h5("Percent of Tree Canopy Coverage"),
@@ -157,7 +145,10 @@ ui <- fluidPage(
                  )
                ),
                mainPanel(
-                 plotOutput("pie")
+                 br(),
+                 "Select redlining categories to see the demographic composition of areas historically assigned that rating.",
+                 br(),
+                 plotOutput("pie", width = "900px", height = "600px")
                )
              )
     ),
@@ -174,13 +165,16 @@ ui <- fluidPage(
                  )
                ),
                mainPanel(
-                 plotOutput("pca_plot")
+                 br(),
+                 "Select redlining categories to see which census tracts in the city were historically assigned that rating.",
+                 plotOutput("pca_plot", width = "900px", height = "600px")
                )
              )
     ),
 
     ############################CITE###########################################
     tabPanel("Data & Resources",
+             br(),
              includeMarkdown('citations.md')
     )
   )

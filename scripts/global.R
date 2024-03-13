@@ -9,6 +9,8 @@ library(maps)
 library(kableExtra)
 library(knitr)
 library(ggfortify)
+library(RColorBrewer)
+
 
 
 ###load data, prep for the app, define functions...
@@ -24,8 +26,9 @@ enviroscreen_trimmed <- enviroscreen_final %>%
 #pick data variables
 clean_screen <- enviroscreen_final %>%
   st_drop_geometry() %>%
-  select(pm2_5,diesel_pm,lead,drink_wat,asthma,educatn, poverty,unempl,ling_isol,traffic,zip_pct_64, existing_canopy_pct,approx_loc) %>%
-  drop_na()
+  select(pm2_5,diesel_pm,lead,drink_wat,asthma,educatn, poverty,unempl,ling_isol,traffic,zip_pct_64, existing_canopy_pct,approx_loc, class1) %>%
+  drop_na() %>%
+  mutate(class1 = as.factor(class1))
 
 #scale
 pca_screen<- clean_screen %>%

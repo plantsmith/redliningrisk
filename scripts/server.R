@@ -2,12 +2,6 @@
 
 server <-function(input, output) {
 
-  output$la_skyline <- renderImage({
-    list(src = "la-skyline.jpg",
-         alt = "Los Angeles Skyline",
-         width = "100%")
-  }, deleteFile = FALSE)
-
     grade_select <- reactive({
       redline_grade <- enviroscreen_final %>%
         filter(class1 %in% input$class1)
@@ -40,36 +34,25 @@ server <-function(input, output) {
       return(heat_tracts)
     }) ### end heatER_select
 
-    # variable_select <- reactive({
-    #   selected_tracts <- enviroscreen_final %>%
-    #     select(input$variable_name)
-    #   return(selected_tracts)
-    # }) ### end heatER_select
 
-    grade_colors <- c("A" = "green", "B" = "lightblue", "C" = "orange", "D" = "red")
-    # canopy_colors <- ifelse(enviroscreen_final$existing_canopy_pct <30, "lightgreen", "darkgreen")
+    grade_colors <- c("A" = "green", "B" = "cyan", "C" = "orange", "D" = "firebrick1")
 
     output$grade_plot <- renderPlot({
       # Base plot with LA County boundaries
       base_plot <- ggplot() +
         geom_sf(data = enviroscreen_final, color = "black", fill = "white") +
-        # geom_sf(data = city_trees, aes(), color = "darkgreen", size = 0.1) +
         theme_void()
 
       # Add grade polygons
       grade_plot <- base_plot +
-        # geom_sf(data = canopy_select(), aes(fill = "canopy"), alpha = 0.3) +
-        # geom_sf(data = poverty_select(), aes(fill = "poverty"), alpha = 0.3) +
-        # geom_sf(data = heatER_select(), aes(fill = "heat"), alpha = 0.3) +
         geom_sf(data = enviroscreen_trimmed, aes(fill = !!input$variable_name)) +
-        geom_sf(data = grade_select(), aes(color = class1), fill = NA, linewidth = 0.4) +
-        # scale_fill_manual(values = c("canopy" = "green3", "poverty" = "purple", "heat" = "darkred")) +
-        scale_fill_continuous(type = "viridis") +
+        geom_sf(data = grade_select(), aes(color = class1), fill = NA, linewidth = 0.6) +
+        scale_fill_gradient(low = "lightskyblue", high = "navy", na.value = NA) +
         scale_color_manual(values = grade_colors) +
         labs(color = "Redlining Grade")
 
       grade_plot
-    }) ### end grade_plot output
+    }, height = 600, width = 900) ### end grade_plot output
 
     output$summary_table <- renderTable({
       means_table <- enviroscreen_final %>%
@@ -92,7 +75,7 @@ server <-function(input, output) {
 
     output$hist_poverty <- renderPlot({
       ggplot(data = grade_select_hist(), aes(x = poverty)) +
-        geom_histogram(fill = "purple", color = "black", bins = 20) +
+        geom_histogram(fill = "skyblue", color = "white", bins = 20) +
         labs(x = "Poverty", y = "Frequency", title = " ") +
         theme_minimal() +
         theme(axis.text = element_text(size = 10),
@@ -102,7 +85,7 @@ server <-function(input, output) {
 
     output$hist_canopy <- renderPlot({
       ggplot(data = grade_select_hist(), aes(x = existing_canopy_pct)) +
-        geom_histogram(fill = "darkgreen", color = "black", bins = 20) +
+        geom_histogram(fill = "dodgerblue", color = "white", bins = 20) +
         labs(x = "Existing Canopy Percentage", y = "Frequency", title = " ") +
         theme_minimal() +
         theme(axis.text = element_text(size = 10),
@@ -112,7 +95,7 @@ server <-function(input, output) {
 
     output$hist_heatER <- renderPlot({
       ggplot(data = grade_select_hist(), aes(x = zip_pct_64)) +
-        geom_histogram(fill = "red4", color = "black", bins = 20) +
+        geom_histogram(fill = "navy", color = "white", bins = 20) +
         labs(x = "Excess ER Visits on Hot Days", y = "Frequency", title = " ") +
         theme_minimal() +
         theme(axis.text = element_text(size = 10),
@@ -139,42 +122,38 @@ server <-function(input, output) {
     })
 
     # Color palette
-    demographic_colors <- c("#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854", "#ffd92f")
+    demographic_colors <- c("#86CEFA", "#73B9EE","#5494DA","#3373C4", "#1750AC", "#003396")
 
     output$pie <- renderPlot({
       ggplot(data = pie_df(), aes(x = "", y = mean_percent, fill = race)) +
-        geom_bar(stat = "identity", width = 1) +
+        geom_bar(stat = "identity", width = 1, color = "white") +
         coord_polar("y", start = 0) +
         scale_fill_manual(values = demographic_colors) +
         theme_void() +
         theme(legend.position = "right") +  # Moving legend to the right
-        labs(title = "Distribution of Demographics", fill = "Race")  # Adding title and legend title
-    })
+        labs(title = " ", fill = "Race")  # Adding title and legend title
+    }, height = 600, width = 900)
 
     ###PCA###
 
-    pca <- reactive({
-      # clean_screen %>%
-      #   filter(approx_loc %in% input$loc) %>%
-      #   select(where(is.numeric)) %>%
-      #   prcomp(scale = TRUE)
-    })
+ class1_colors <- c("A" = "limegreen", "B" = "deepskyblue2", "C" = "orange", "D" = "firebrick1")
 
     output$pca_plot <- renderPlot({
-     pca_2 <-  clean_screen %>%
+     pca <-  clean_screen %>%
         filter(approx_loc %in% input$loc) %>%
         select(where(is.numeric)) %>%
         prcomp(scale = TRUE)
-      autoplot(pca_2,
+      autoplot(pca,
              data = clean_screen %>%
                filter(approx_loc %in% input$loc),
-             color = "approx_loc",
+             color = "class1",
              loadings = TRUE,
              loadings.label = TRUE,
              loadings.colour = "black",
              loadings.label.colour = "black",
              loadings.label.vjust = -0.5)+
+        scale_color_manual(values = class1_colors) +
       theme_minimal()
-  })
+  }, height = 600, width = 900)
 
   } ### end server
