@@ -8,9 +8,11 @@ ui <- fluidPage(
   tabsetPanel(
     tabPanel("Home",
              # Adding an image to the front page
-             HTML('<div style="text-align: center;">
-  <img src="la-skyline.jpg" height="70%" width="70%" alt="Los Angeles Skyline">
-  <p style="font-size: 12px; margin-top: 5px;">Aerial view of Los Angeles. Photo by RMDE Photo Archive.</p></div>'),
+             HTML('<center><img src = "la-skyline.jpg", height = "70%", width = "70%"></center'),
+
+             # photocredits
+             p(em("Aerial view of Los Angeles. Photo by RMDE Photo Archive."), style = "text-align:center; font-size:12px"
+             ), # end photo text
 
              hr(), # horizontal line break
 
@@ -18,7 +20,7 @@ ui <- fluidPage(
              fluidRow(
                column(width = 7,
                       h4(strong("PURPOSE"), style = "text-align:justify;color:black"),
-                      p("Enter Text Here", style = "font-size: 12pt;"), # End paragraph 1
+                      p("Enter Text Here", style = "font-size: 11pt;"), # End paragraph 1
                       br(), # Line break
 
                       h4(strong("WHAT IS REDLINING"), style = "text-align:justify;color:black"),
@@ -84,26 +86,11 @@ ui <- fluidPage(
                                "Hazardous" = "D"),
                    selected = "A"
                  ),
-                 selectInput(inputId = "variable_name",
-                             label = strong("Choose Variable"),
-                             choices = c("Heat ER Visits" = "heat_ER_visits",
-                                         "Canopy Coverage Percentage" = "canopy_pct",
-                                         "Poverty Percentage" = "pct_poverty"),
-                             selected = "existing_canopy_pct",
-                             multiple = FALSE)
-
-            #    selectInput(inputId = "variable_name",
-            # label = strong("Choose Variable"),
-            # choices = c("Heat ER Visits" = "heat_ER_visits",
-            #             "Canopy Coverage Percentage" = "canopy_pct",
-            #             "Poverty Percentage" = "pct_poverty"),
-            # selected = "existing_canopy_pct",
-            # multiple = FALSE)
-
-            # choices = c("Heat ER Visits" = "heat_ER_visits",
-            #             "Canopy Coverage Percentage" = "canopy_pct",
-            #             "Poverty Percentage" = "pct_poverty"),
-
+                 varSelectInput(inputId = "variable_name",
+                                label = strong("Choose Variable"),
+                                data = enviroscreen_trimmed %>% st_drop_geometry(),
+                                selected = "existing_canopy_pct",
+                                multiple = FALSE)
 
                ),
                mainPanel(width = 9,

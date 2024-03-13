@@ -35,6 +35,8 @@ server <-function(input, output) {
     }) ### end heatER_select
 
 
+
+
     grade_colors <- c("A" = "green", "B" = "cyan", "C" = "orange", "D" = "firebrick1")
 
     output$grade_plot <- renderPlot({
