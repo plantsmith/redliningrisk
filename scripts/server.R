@@ -83,8 +83,8 @@ server <-function(input, output) {
         labs(x = "Poverty", y = "Frequency", title = " ") +
         theme_minimal() +
         theme(axis.text = element_text(size = 10),
-              axis.title = element_text(size = 12, face = "bold"),
-              plot.title = element_text(size = 14, face = "bold"))
+              axis.title = element_text(size = 12),
+              plot.title = element_text(size = 14))
     })
 
     output$hist_canopy <- renderPlot({
@@ -93,8 +93,8 @@ server <-function(input, output) {
         labs(x = "Existing Canopy Percentage", y = "Frequency", title = " ") +
         theme_minimal() +
         theme(axis.text = element_text(size = 10),
-              axis.title = element_text(size = 12, face = "bold"),
-              plot.title = element_text(size = 14, face = "bold"))
+              axis.title = element_text(size = 12),
+              plot.title = element_text(size = 14))
     })
 
     output$hist_heatER <- renderPlot({
@@ -103,8 +103,8 @@ server <-function(input, output) {
         labs(x = "Excess ER Visits on Hot Days", y = "Frequency", title = " ") +
         theme_minimal() +
         theme(axis.text = element_text(size = 10),
-              axis.title = element_text(size = 12, face = "bold"),
-              plot.title = element_text(size = 14, face = "bold"))
+              axis.title = element_text(size = 12),
+              plot.title = element_text(size = 14))
     })
 
 
@@ -165,7 +165,9 @@ server <-function(input, output) {
              loadings.label.vjust = -0.5)+
       scale_color_manual(values = class1_colors) +
       labs(color = "Redlining Category") +
-      theme_minimal()
-  }, height = 600, width = 900)
+      theme_minimal()+
+        theme(legend.text = element_text(size = 14),
+              legend.title = element_text(size = 14))
+  }, height = 600, width = 900) ### end pca_plot output
 
   } ### end server
