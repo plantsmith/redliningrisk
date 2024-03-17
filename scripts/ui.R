@@ -20,7 +20,7 @@ ui <- fluidPage(
              fluidRow(
                column(width = 7,
                       h4(strong("PURPOSE"), style = "text-align:justify;color:black"),
-                      p("Enter Text Here", style = "font-size: 11pt;"), # End paragraph 1
+                      p("This interactive data application explores how historical redlining is related to modern-day urban health inequalities and environmental injustices.", style = "font-size: 12pt;"), # End paragraph 1
                       br(), # Line break
 
                       h4(strong("WHAT IS REDLINING"), style = "text-align:justify;color:black"),
@@ -39,7 +39,7 @@ ui <- fluidPage(
                       br(),
 
                       h4(strong("ENVIRONMENTAL IMPLICATIONS"), style = "text-align:justify;color:black"),
-                      p("Environmental disparities in American cities reflect historic redlining policies that favored wealthy, predominantly white neighborhoods over poorer, often minority communities. A study led by scientists in 2017-2018 used HOLC redlining maps to investigate the link between discriminatory housing practices and contemporary environmental stressors, particularly heat islands. They found that areas previously redlined by HOLC were significantly hotter than greenlined neighborhoods during summer months, mainly due to differences in surface materials and tree canopy coverage. Subsequent research has confirmed these findings, highlighting the enduring impact of past discriminatory policies on present-day environmental inequalities and public health outcomes.",
+                      p("Environmental disparities in American cities reflect historic redlining policies that favored wealthy, predominantly white neighborhoods over poorer, often minority communities. Wealthier urban areas tend to have more parks and trees, which combat the urban heat island effect by providing shade and cooling the air temperature. A study led by scientists in 2017-2018 used HOLC redlining maps to investigate the link between discriminatory housing practices and contemporary environmental stressors, particularly heat islands. They found that areas previously redlined by HOLC were significantly hotter than greenlined neighborhoods during summer months, mainly due to differences in surface materials and tree canopy coverage. Subsequent research has confirmed these findings, highlighting the enduring impact of past discriminatory policies on present-day environmental inequalities and public health outcomes.",
                         style = "font-size: 12pt;"), # Adjusting font size
                       br(),
 
@@ -90,7 +90,13 @@ ui <- fluidPage(
                                 label = strong("Choose Variable"),
                                 data = enviroscreen_trimmed %>% st_drop_geometry(),
                                 selected = "existing_canopy_pct",
-                                multiple = FALSE)
+                                multiple = FALSE),
+                 p(em("'canopy_pct' = % of area covered by tree canopy"),
+                   style = "text-align: center; font-size:10px"),
+                 p(em("'pct_poverty' = % of population living 2x below the federal poverty level"),
+                   style = "text-align: center; font-size:10px"),
+                 p(em("'heat_ER_visits' = daily excess number of emergency room visits during an extreme heat day"),
+                   style = "text-align: center; font-size:10px"),
 
                ),
                mainPanel(width = 9,
@@ -168,8 +174,14 @@ ui <- fluidPage(
                ),
                mainPanel(
                  br(),
-                 "Select redlining categories to see which census tracts in the city were historically assigned that rating.",
-                 plotOutput("pca_plot", width = "900px", height = "600px")
+                 "Select a location to view a PCA biplot for that area.",
+                 plotOutput("pca_plot", width = "900px", height = "600px"),
+                 h5("Observations"),
+                 tags$li("Poverty and low educational achievement are highly positively correlated. This reflects the cyclical effects of poverty, in that education is harder to obtain and well-paying jobs are harder to find, perpetuating these conditions."),
+                 tags$li("Asthma and heat illness rates are highly positively correlated. Interestingly, asthma rates are not strongly correlated with diesel particulate matter, traffic, or PM2.5 pollution. Perhaps there are other pollutants or risk factors that are more significant contributors to asthma."),
+                 tags$li("The amount of tree canopy cover in a census tract is generally negatively correlated with poverty, pollution metrics, and health conditions. Areas in the 'A' grade generally had high canopy cover. This is a notable indication that higher canopy coverage seems to be present in more affluent communities, which are more economically stable and have lower health risks."),
+                 tags$li("Interestingly, census tracts do not clearly cluster based upon redlining grade, but rather there seems to be a large amount of variation in the tracts in each grade. The one exception seems to be 'A' areas, which are generally found within the left half of the plots. The lack of clear clustering indicates there may be other variables worth exploring that more clearly delineate the differences between these areas."),
+                 br(),
                )
              )
     ),

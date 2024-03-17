@@ -121,7 +121,8 @@ server <-function(input, output) {
         pivot_longer(cols = white:other_mult, names_to = "race", values_to = "percent") %>%
         drop_na() %>%
         group_by(class1, race) %>%
-        summarize(mean_percent = mean(percent)) %>%
+        summarize(mean_percent = round(mean(percent), digits = 1)) %>%
+        mutate(labels = paste0(mean_percent, "%")) %>%
         mutate(race = race_pie[race])
     })
 
@@ -131,6 +132,10 @@ server <-function(input, output) {
     output$pie <- renderPlot({
       ggplot(data = pie_df(), aes(x = "", y = mean_percent, fill = race)) +
         geom_bar(stat = "identity", width = 1, color = "white") +
+        geom_text(aes(x = 1.3, label = labels),
+                  color = "white",
+                  size = 7,
+                  position = position_stack(vjust = 0.5)) +
         coord_polar("y", start = 0) +
         scale_fill_manual(values = demographic_colors) +
         theme_void() +
@@ -158,7 +163,8 @@ server <-function(input, output) {
              loadings.colour = "black",
              loadings.label.colour = "black",
              loadings.label.vjust = -0.5)+
-        scale_color_manual(values = class1_colors) +
+      scale_color_manual(values = class1_colors) +
+      labs(color = "Redlining Category") +
       theme_minimal()
   }, height = 600, width = 900)
 
