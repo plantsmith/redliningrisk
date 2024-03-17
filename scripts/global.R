@@ -29,7 +29,10 @@ clean_screen <- enviroscreen_final %>%
   select(pm2_5,diesel_pm,lead,drinking_water = drink_wat,asthma,education = educatn, poverty, unemployment = unempl,
          linguistic_isolation = ling_isol,traffic, heat_illness = zip_pct_64, canopy_pct = existing_canopy_pct,approx_loc, class1) %>%
   drop_na() %>%
-  mutate(class1 = as.factor(class1))
+  mutate(class1 = as.factor(class1),
+         log_diesel_pm = log(diesel_pm),
+         log_canopy_pct = log(canopy_pct),
+         .keep = "unused")
 
 # pick locations based on number of observations
 enviroscreen_final %>%
