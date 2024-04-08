@@ -1,0 +1,13 @@
+name: heat_risk_inequality
+title: heat_risk_inequality
+username: plantsmith
+account: plantsmith
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 11560380
+bundleId: 8465680
+url: https://plantsmith.shinyapps.io/heat_risk_inequality/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: liv_trys_stuff.R|nat_trys_stuff.R|shinysetup.R
