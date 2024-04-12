@@ -16,7 +16,7 @@ library(RColorBrewer)
 ###load data, prep for the app, define functions...
 
 ## get our data
-enviroscreen_final <- read_sf(here('data', 'enviroscreen_final.gpkg'))
+enviroscreen_final <- read_sf('enviroscreen_final.gpkg')
 enviroscreen_trimmed <- enviroscreen_final %>%
   select(canopy_pct = existing_canopy_pct, pct_poverty = poverty, heat_ER_visits = zip_pct_64)
 
