@@ -10,8 +10,13 @@ library(kableExtra)
 library(knitr)
 library(ggfortify)
 library(RColorBrewer)
+library(showtext)
 
+# trying to add nunito sans from google fonts to add to our ggpolots and other text
+font_add_google("Nunito Sans", "nunito")
 
+# Use showtext to enable the use of custom fonts in ggplot
+showtext_auto()
 
 ###load data, prep for the app, define functions...
 
@@ -20,6 +25,10 @@ enviroscreen_final <- read_sf('enviroscreen_final.gpkg')
 enviroscreen_trimmed <- enviroscreen_final %>%
   select(canopy_pct = existing_canopy_pct, pct_poverty = poverty, heat_ER_visits = zip_pct_64)
 
+## define variables for Map
+es_vars <- c('Canopy %' = 'canopy_pct',
+             'Poverty %' = 'pct_poverty',
+             'Heat ER visits' = 'heat_ER_visits')
 
 #####PCA######
 

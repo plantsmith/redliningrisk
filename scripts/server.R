@@ -2,6 +2,8 @@
 
 server <-function(input, output) {
 
+  # bs_themer()
+
     grade_select <- reactive({
       redline_grade <- enviroscreen_final %>%
         filter(class1 %in% input$class1)
@@ -45,13 +47,21 @@ server <-function(input, output) {
         geom_sf(data = enviroscreen_final, color = "black", fill = "white") +
         theme_void()
 
+       # define fill label by matching the same thing in the es_vars vector (in global enviro)
+      fill_lbl <- names(es_vars[es_vars == input$variable_name])
+
+      #define fill column name as a "name" object instead of "character"
+      #this was what the varSelectInput automatically did, here we're doing it manually
+      # so it works with regular selectInput (which returns a "character" object)
+      fill_col <- sym(input$variable_name)
+
       # Add grade polygons
       grade_plot <- base_plot +
-        geom_sf(data = enviroscreen_trimmed, aes(fill = !!input$variable_name)) +
+        geom_sf(data = enviroscreen_trimmed, aes(fill = !!fill_col)) +
         geom_sf(data = grade_select(), aes(color = class1), fill = NA, linewidth = 0.6) +
         scale_fill_gradient(low = "lightskyblue", high = "navy", na.value = NA) +
         scale_color_manual(values = grade_colors) +
-        labs(color = "Redlining Grade")+
+        labs(color = "Redlining Grade",fill = fill_lbl)+
         theme(legend.title = element_text(size = 16),  # Adjust legend title size
        legend.text = element_text(size = 16))
 
@@ -102,9 +112,9 @@ server <-function(input, output) {
         geom_histogram(fill = "navy", color = "white", bins = 20) +
         labs(x = "Excess ER Visits on Hot Days", y = "Frequency", title = " ") +
         theme_minimal() +
-        theme(axis.text = element_text(size = 10),
-              axis.title = element_text(size = 12),
-              plot.title = element_text(size = 14))
+        theme(axis.text = element_text(size = 10, family = "nunito"),
+              axis.title = element_text(size = 12, family = "nunito"),
+              plot.title = element_text(size = 14, family = "nunito"))
     })
 
 
