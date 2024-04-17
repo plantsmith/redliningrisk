@@ -92,9 +92,9 @@ server <-function(input, output) {
         geom_histogram(fill = "skyblue", color = "white", bins = 20) +
         labs(x = "Poverty", y = "Frequency", title = " ") +
         theme_minimal() +
-        theme(axis.text = element_text(size = 10),
-              axis.title = element_text(size = 12),
-              plot.title = element_text(size = 14))
+        theme(axis.text = element_text(size = 18),
+              axis.title = element_text(size = 18),
+              plot.title = element_text(size = 22))
     })
 
     output$hist_canopy <- renderPlot({
@@ -102,9 +102,9 @@ server <-function(input, output) {
         geom_histogram(fill = "dodgerblue", color = "white", bins = 20) +
         labs(x = "Existing Canopy Percentage", y = "Frequency", title = " ") +
         theme_minimal() +
-        theme(axis.text = element_text(size = 10),
-              axis.title = element_text(size = 12),
-              plot.title = element_text(size = 14))
+        theme(axis.text = element_text(size = 18),
+              axis.title = element_text(size = 18),
+              plot.title = element_text(size = 22))
     })
 
     output$hist_heatER <- renderPlot({
@@ -112,9 +112,9 @@ server <-function(input, output) {
         geom_histogram(fill = "navy", color = "white", bins = 20) +
         labs(x = "Excess ER Visits on Hot Days", y = "Frequency", title = " ") +
         theme_minimal() +
-        theme(axis.text = element_text(size = 10, family = "nunito"),
-              axis.title = element_text(size = 12, family = "nunito"),
-              plot.title = element_text(size = 14, family = "nunito"))
+        theme(axis.text = element_text(size = 18),
+              axis.title = element_text(size = 18),
+              plot.title = element_text(size = 22))
     })
 
 

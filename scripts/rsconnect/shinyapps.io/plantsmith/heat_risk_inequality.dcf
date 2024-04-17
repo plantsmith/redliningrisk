@@ -5,7 +5,7 @@ account: plantsmith
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 11560380
-bundleId: 8487549
+bundleId: 8507568
 url: https://plantsmith.shinyapps.io/heat_risk_inequality/
 version: 1
 asMultiple: FALSE
