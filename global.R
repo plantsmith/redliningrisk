@@ -1,22 +1,15 @@
 ### Attach packages
 library(shiny)
+library(here)
 library(ggplot2)
 library(tidyverse)
 library(sf)
-library(here)
 library(bslib)
 library(maps)
 library(kableExtra)
 library(knitr)
 library(ggfortify)
 library(RColorBrewer)
-library(showtext)
-
-# trying to add nunito sans from google fonts to add to our ggpolots and other text
-font_add_google("Nunito Sans", "nunito")
-
-# Use showtext to enable the use of custom fonts in ggplot
-showtext_auto()
 
 ###load data, prep for the app, define functions...
 
