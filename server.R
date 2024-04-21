@@ -65,7 +65,9 @@ server <-function(input, output) {
         theme(legend.title = element_text(size = 16),  # Adjust legend title size
        legend.text = element_text(size = 16))
 
-      grade_plot
+      ggdraw() +
+        draw_plot(grade_plot, x = 0, y = 0, width = 1, height = 1) +
+        draw_plot(california_inset, x = 0, y = .05, width = .35, height = .35)
     }, height = 600, width = 900) ### end grade_plot output
 
     output$summary_table <- renderTable({

@@ -22,6 +22,7 @@ library(rnaturalearth)
 ```
 
 # Inset Map
+
 ```{r}
  grade_colors <- c("A" = "green", "B" = "cyan", "C" = "orange", "D" = "firebrick1")
 
@@ -62,27 +63,38 @@ california_sf <- california %>%
 
 ```
 
-
 ```{r}
 #inset map
 
 california_inset <- ggplot() +
   geom_sf(data = california_sf, aes(), fill = "grey", color = "black") + 
   geom_sf(data = enviroscreen_final, aes(), fill = "dodgerblue", color = "dodgerblue") +
-  theme_void()
+  theme_void() +
+  theme(plot.background = element_rect(fill = "white", color = "black"))
 
 california_inset
 
 ```
 
 # Background map
+
 ```{r}
 #update
 base_plot <- ggplot() +
   geom_sf(data = enviroscreen_final, fill = "white", color = "black") +
   theme_void()
+base_plot
+```
+
+Combine base plot and inset map
+```{r}
+library(cowplot)
+ggdraw() + 
+  draw_plot(base_plot, x = 0, y = 0, width = 1, height = 1) + 
+  draw_plot(california_inset, x = 0, y = .05, width = .35, height = .35)
 
 ```
+
 
 ```{r}
 
@@ -103,6 +115,3 @@ la$osm_lines %>%
   theme_void()
 
 ```
-
-
-

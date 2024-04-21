@@ -13,6 +13,7 @@ library(ggfortify)
 library(RColorBrewer)
 library(markdown)
 library(rnaturalearth)
+library(cowplot)
 
 ###load data, prep for the app, define functions...
 
@@ -47,4 +48,24 @@ enviroscreen_final %>%
 
 
 la_sky<- here("misc","la-skyline.jpg")
+
+### Making inset map
+#make an inset map of california
+usa <- map_data("usa")
+california <- map_data("state") %>%
+  filter(region == "california")
+
+#transform california data frame into a spatial object
+california_sf <- california %>%
+  st_as_sf(coords = c("long", "lat"), crs = 4269) %>%
+  summarize(geometry = st_combine(geometry)) %>% # transform points into polygon
+  st_cast("POLYGON")
+
+#inset map
+california_inset <- ggplot() +
+  geom_sf(data = california_sf, aes(), fill = "grey", color = "black") +
+  geom_sf(data = enviroscreen_final, aes(), fill = "dodgerblue", color = "dodgerblue") +
+  theme_void() +
+  theme(plot.background = element_rect(fill = "white", color = "black"))
+
 
