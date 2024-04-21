@@ -3,6 +3,24 @@ title: "try stuff"
 format: html
 editor: visual
 ---
+
+```{r}
+library(shiny)
+library(here)
+library(ggplot2)
+library(tidyverse)
+library(sf)
+library(bslib)
+library(maps)
+library(mapdata)
+library(kableExtra)
+library(knitr)
+library(ggfortify)
+library(RColorBrewer)
+library(markdown)
+library(rnaturalearth)
+```
+
 # Inset Map
 ```{r}
  grade_colors <- c("A" = "green", "B" = "cyan", "C" = "orange", "D" = "firebrick1")
@@ -67,15 +85,24 @@ base_plot <- ggplot() +
 ```
 
 ```{r}
+
+#roads map of LA
+
 library(osmdata)
-library(sf)
 
-# Define the bounding box for California
-bbox <- c(left = -124.5, bottom = 32.5, right = -114.0, top = 42.0)
+# available_features()
 
-# Download OSM data within the bounding box
-osm_data <- osmdata(bbox = bbox)
+la <- opq(bbox = 'Los Angeles, California') %>%
+  add_osm_feature(key = 'highway', value = 'motorway') %>%
+  osmdata_sf()
 
+#plot the roads
+la$osm_lines %>%
+  ggplot() +
+  geom_sf() +
+  theme_void()
 
 ```
+
+
 
