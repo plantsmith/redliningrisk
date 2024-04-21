@@ -6,10 +6,13 @@ library(tidyverse)
 library(sf)
 library(bslib)
 library(maps)
+library(mapdata)
 library(kableExtra)
 library(knitr)
 library(ggfortify)
 library(RColorBrewer)
+library(markdown)
+library(rnaturalearth)
 
 ###load data, prep for the app, define functions...
 
@@ -21,7 +24,7 @@ enviroscreen_trimmed <- enviroscreen_final %>%
 ## define variables for Map
 es_vars <- c('Canopy %' = 'canopy_pct',
              'Poverty %' = 'pct_poverty',
-             'Heat ER visits' = 'heat_ER_visits')
+             'Heat Related ER Visits' = 'heat_ER_visits')
 
 #####PCA######
 

@@ -1,0 +1,81 @@
+---
+title: "try stuff"
+format: html
+editor: visual
+---
+# Inset Map
+```{r}
+ grade_colors <- c("A" = "green", "B" = "cyan", "C" = "orange", "D" = "firebrick1")
+
+      base_plot <- ggplot() +
+        geom_sf(data = enviroscreen_final, fill = "dodgerblue", color = "dodgerblue") +
+        theme_void()
+
+      # Add grade polygons
+      grade_plot <- base_plot +
+        geom_sf(data = enviroscreen_trimmed, aes(fill = 'canopy_pct')) +
+        scale_fill_gradient(low = "lightskyblue", high = "navy", na.value = NA) +
+        scale_color_manual(values = grade_colors) +
+        labs(color = "Redlining Grade",fill = 'canopy_pct')+
+        theme(legend.title = element_text(size = 16),  # Adjust legend title size
+       legend.text = element_text(size = 16))
+
+ grade_plot
+```
+
+```{r}
+#check the crs of california 
+# st_crs(california)
+# st_crs(enviroscreen_final)
+
+```
+
+```{r}
+#make an inset map of california 
+usa <- map_data("usa")
+california <- map_data("state") %>% 
+  filter(region == "california")
+
+#transform california data frame into a spatial object
+california_sf <- california %>% 
+  st_as_sf(coords = c("long", "lat"), crs = 4269) %>% 
+  summarize(geometry = st_combine(geometry)) %>% # transform points into polygon
+  st_cast("POLYGON")
+
+```
+
+
+```{r}
+#inset map
+
+california_inset <- ggplot() +
+  geom_sf(data = california_sf, aes(), fill = "grey", color = "black") + 
+  geom_sf(data = enviroscreen_final, aes(), fill = "dodgerblue", color = "dodgerblue") +
+  theme_void()
+
+california_inset
+
+```
+
+# Background map
+```{r}
+#update
+base_plot <- ggplot() +
+  geom_sf(data = enviroscreen_final, fill = "white", color = "black") +
+  theme_void()
+
+```
+
+```{r}
+library(osmdata)
+library(sf)
+
+# Define the bounding box for California
+bbox <- c(left = -124.5, bottom = 32.5, right = -114.0, top = 42.0)
+
+# Download OSM data within the bounding box
+osm_data <- osmdata(bbox = bbox)
+
+
+```
+
